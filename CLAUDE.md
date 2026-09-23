@@ -19,6 +19,9 @@ mean touching the content files.
 
 - **Astro** 7 (7.3.4 at setup), MIT licensed. Content Collections for the CMS layer.
 - Markdown + frontmatter for content, validated by `src/content.config.ts`.
+  Rendered by Sätteri (Astro 7's Markdown engine, `@astrojs/markdown-satteri`)
+  with **smart punctuation off**, so quotes render exactly as typed, like on
+  Webflow.
 - **GitHub Pages** for hosting, custom domain, free HTTPS.
 - No CSS framework chosen yet. No JS framework needed — the site is documents.
 
@@ -102,8 +105,8 @@ Webflow CDN URLs remain. See `README.md` for usage and the field mapping.
 - **Fonts bundled** via Fontsource (OFL), not loaded from Google. Used:
   Montserrat 200/400/500/600/700 and Esteban 400. Bitter is loaded by the old
   site but used in only one rule; check before bundling it.
-- **Order:** shared layout + footer → project page → category page → home →
-  about me. Per template: build, compare against the reference, list the
+- **Order** (changed 2026-09-23): shared layout + footer → home → about me →
+  category page → project page. Per template: build, compare against the reference, list the
   differences, get sign-off, then ask before committing.
 
 ## Reference capture
@@ -128,7 +131,10 @@ sit on `5f3a5425…`.
 
 `node scripts/compare.mjs <local path> <reference name> [header,footer,full]`
 pixel-diffs the running dev server against `shots/` at all four widths and
-writes red-highlighted diffs to `reference/diff/` (gitignored).
+writes red-highlighted diffs to `reference/diff/` (gitignored). Set
+`LOCAL_URL=http://localhost:4322` to diff a production build served by
+`npx astro preview --port 4322` instead: the dev server caches rendered
+Markdown and can serve stale output after config changes.
 `node scripts/css-rules.mjs .class …` prints every Webflow CSS rule for the
 given selectors, per breakpoint: the fastest way to get exact values.
 
@@ -147,15 +153,19 @@ given selectors, per breakpoint: the fastest way to get exact values.
    `/cv/nynke-zwart-cv.pdf`; replace that file to update it. Page titles are
    `<title> | Portfolio Nynke` (the live site uses "Portfolio Nynke" for
    almost every page).
-5. Project page template. Frontmatter carries metadata, cover, gallery and the
+5. ~~Home page.~~ Done: intro text in `src/content/pages/home.md` (new `pages`
+   collection), tiles in `CategoryTile.astro`. Full page identical to live
+   apart from the © year; hover and phone scroll-fill end states identical.
+   Hover is pure CSS; the phone scroll-fill is a small IntersectionObserver.
+6. About me (`/aboutme`): static, copied by hand; age is 30.
+7. Category page template, themed by the category's `colour`.
+8. Project page template. Frontmatter carries metadata, cover, gallery and the
    side-by-side `methodPair`; the Markdown body carries method text, the
    full-width image and the conclusion, already in the right order.
    **GIFs:** 22 project images are GIFs, and `<Image>` converts them to a
    single-frame WebP. Render GIFs with a plain `<img src={img.src}>` (or
    `format="gif"`) so they keep animating.
-6. Category page template, themed by the category's `colour`.
-7. Home page.
-8. Deploy to GitHub Pages, add `CNAME`, point DNS, verify old URLs resolve.
+9. Deploy to GitHub Pages, add `CNAME`, point DNS, verify old URLs resolve.
 
 Content editing after launch is undecided: either Markdown directly in Git, or
 Sveltia CMS for a visual admin panel that commits to the repo. Doesn't block

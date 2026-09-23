@@ -76,4 +76,13 @@ const projects = defineCollection({
     }),
 });
 
-export const collections = { projects, categories };
+// Hand-written pages that aren't lists: the home intro, about me.
+const pages = defineCollection({
+  loader: glob({ pattern: "**/*.md", base: "./src/content/pages" }),
+  schema: z.object({
+    title: z.string(),
+    description: z.string().optional(),
+  }),
+});
+
+export const collections = { projects, categories, pages };
