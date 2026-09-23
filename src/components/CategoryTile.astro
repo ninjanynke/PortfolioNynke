@@ -1,0 +1,149 @@
+---
+import type { CollectionEntry } from 'astro:content';
+
+interface Props {
+  category: CollectionEntry<'categories'>;
+}
+
+const { category } = Astro.props;
+const { title, colour, logo, logoHover } = category.data;
+---
+
+<li class="tile-slot">
+  <a
+    href={`/site-categories/${category.id}`}
+    class="tile"
+    style={`background-color: ${colour}`}
+    data-tile
+  >
+    <div class="tile-inner">
+      <div class="logo-stack">
+        {logo && <img src={logo.src} width="168" alt="" class="logo-outline" />}
+        {logoHover && <img src={logoHover.src} alt="" class="logo-filled" />}
+      </div>
+      <div class="tile-label">
+        <div class="label-colour" style={`color: ${colour}`}>{title}</div>
+        <div class="label-white">{title}</div>
+      </div>
+    </div>
+  </a>
+</li>
+
+<style>
+  /* Square slot: the padding trick keeps a 1:1 ratio at every width. */
+  .tile-slot {
+    position: relative;
+    width: 100%;
+    padding-bottom: 100%;
+    transition: all 0.625s;
+  }
+
+  .tile {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    max-width: 100%;
+    border-radius: 4px;
+    transition: all 0.625s;
+  }
+
+  .tile-inner {
+    opacity: 1;
+    transition: all 0.45s;
+  }
+
+  .logo-stack {
+    position: relative;
+    display: flex;
+    justify-content: flex-start;
+  }
+
+  .logo-outline {
+    position: relative;
+    z-index: 2;
+    overflow: visible;
+  }
+
+  .logo-filled {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    opacity: 0;
+  }
+
+  .tile-label {
+    display: grid;
+    grid-template-columns: 1fr;
+    justify-content: center;
+    justify-items: stretch;
+  }
+
+  .label-colour {
+    position: absolute;
+    justify-self: center;
+    text-align: center;
+  }
+
+  .label-white {
+    position: relative;
+    color: #fff;
+    text-align: center;
+    font-family: var(--font-ui);
+  }
+
+  /* Animations, matching the Webflow interactions:
+     - logo cross-fade, 500 ms: on hover from 768px up, and on phones when
+       the tile scrolls into view (TileScrollFill toggles .is-filled)
+     - white title fades out on hover, 100 ms, revealing the coloured one */
+  .logo-outline,
+  .logo-filled {
+    transition: opacity 500ms;
+  }
+
+  .tile.is-filled .logo-filled { opacity: 1; }
+  .tile.is-filled .logo-outline { opacity: 0; }
+
+  .label-white {
+    transition: opacity 100ms;
+  }
+
+  .tile:hover .label-white {
+    opacity: 0;
+  }
+
+  /* Hover turns the tile white with a soft shadow (inline background colour
+     stays underneath, so on phones only the shadow shows). */
+  .tile:hover {
+    box-shadow: 3px 3px 10px 1px var(--box-shadow);
+    background-image: linear-gradient(#fff, #fff);
+  }
+
+  @media screen and (min-width: 768px) {
+    .tile:hover .logo-filled { opacity: 1; }
+    .tile:hover .logo-outline { opacity: 0; }
+  }
+
+  @media screen and (max-width: 991px) {
+    .logo-stack {
+      justify-content: center;
+    }
+
+    .tile-inner {
+      width: 40%;
+    }
+  }
+
+  @media screen and (max-width: 767px) {
+    .tile:hover {
+      background-image: none;
+    }
+
+    .tile-inner {
+      width: 50%;
+    }
+  }
+</style>

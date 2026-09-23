@@ -13,6 +13,7 @@
     "astro": "astro"
   },
   "dependencies": {
+    "@astrojs/markdown-satteri": "^0.4.2",
     "@fontsource/esteban": "^5.3.0",
     "@fontsource/montserrat": "^5.3.0",
     "astro": "^7.3.4"

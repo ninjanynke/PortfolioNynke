@@ -17,7 +17,8 @@ import pixelmatch from 'pixelmatch';
 import { PNG } from 'pngjs';
 import { mkdir, readFile, writeFile } from 'node:fs/promises';
 
-const LOCAL = 'http://localhost:4321';
+// Override with LOCAL_URL to diff a production build (`astro preview`).
+const LOCAL = process.env.LOCAL_URL ?? 'http://localhost:4321';
 const WIDTHS = [1280, 900, 600, 375];
 const SHADOW = 6; // px of header shadow to include below the header
 

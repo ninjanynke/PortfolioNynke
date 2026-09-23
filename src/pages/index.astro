@@ -1,7 +1,141 @@
 ---
+import { getCollection, getEntry, render } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
+import CategoryTile from '../components/CategoryTile.astro';
+import quotation from '../assets/site/quotation.svg';
+
+const home = await getEntry('pages', 'home');
+if (!home) throw new Error('src/content/pages/home.md is missing');
+const { Content } = await render(home);
+
+const categories = (await getCollection('categories')).sort((a, b) => a.data.order - b.data.order);
 ---
 
 <BaseLayout>
-  <!-- Home page content comes in step 7. -->
+  <section class="container intro">
+    <div>
+      <div class="intro-text rich-text">
+        <figure class="intro-quote">
+          <div><img src={quotation.src} width="99" alt="" loading="lazy" /></div>
+        </figure>
+        <Content />
+      </div>
+    </div>
+  </section>
+
+  <section class="container tiles-section">
+    <div class="tiles-wrapper">
+      <ul class="tiles list-reset">
+        {categories.map((category) => <CategoryTile category={category} />)}
+      </ul>
+    </div>
+  </section>
 </BaseLayout>
+
+<script>
+  // On phones there is no hover, so the logo fills in when a tile is scrolled
+  // halfway into view (Webflow: scroll into view, 50% offset; out at 49%).
+  const phone = window.matchMedia('(max-width: 767px)');
+  const observer = new IntersectionObserver(
+    (entries) => {
+      for (const entry of entries) {
+        entry.target.classList.toggle('is-filled', phone.matches && entry.isIntersecting);
+      }
+    },
+    { rootMargin: '0px 0px -50% 0px' },
+  );
+  document.querySelectorAll('[data-tile]').forEach((tile) => observer.observe(tile));
+</script>
+
+<style>
+  .intro {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    padding: 0;
+  }
+
+  .intro-text {
+    display: flex;
+    align-items: center;
+    padding-top: 20px;
+    font-family: var(--font-body);
+  }
+
+  .intro-text :global(p) {
+    margin-left: 10px;
+    padding-left: 0;
+    overflow: visible;
+  }
+
+  /* Webflow's full-width rich-text figure, capped at the quote mark's size */
+  .intro-quote {
+    position: relative;
+    display: block;
+    width: 100%;
+    max-width: 90.5px;
+    margin-left: auto;
+    margin-right: auto;
+    clear: both;
+    text-align: center;
+  }
+
+  .intro-quote > div {
+    display: inline-block;
+    padding-bottom: inherit;
+    color: transparent;
+    font-size: 0;
+  }
+
+  .intro-quote img {
+    width: 100%;
+  }
+
+  .tiles-section {
+    display: block;
+  }
+
+  .tiles-wrapper {
+    position: relative;
+    top: 0;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    padding-top: 0;
+  }
+
+  .tiles {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    grid-auto-columns: 1fr;
+    gap: 20px;
+  }
+
+  @media screen and (max-width: 767px) {
+    .intro,
+    .tiles-section {
+      padding-left: 20px;
+      padding-right: 20px;
+    }
+  }
+
+  @media screen and (max-width: 479px) {
+    .intro-text {
+      display: inline-block;
+      flex-wrap: wrap;
+      justify-content: flex-start;
+      align-items: flex-start;
+    }
+
+    .intro-text :global(p) {
+      margin-left: 0;
+      text-align: left;
+    }
+
+    .tiles {
+      grid-template-columns: 1fr;
+      grid-template-rows: 1fr 1fr 1fr 1fr;
+    }
+  }
+</style>

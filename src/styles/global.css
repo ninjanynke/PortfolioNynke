@@ -71,3 +71,39 @@ h2 {
   padding: 0;
   list-style: none;
 }
+
+p {
+  margin-top: 0;
+  margin-bottom: 10px;
+  font-family: var(--font-body);
+}
+
+figure {
+  margin: 0 0 10px;
+}
+
+@media screen and (max-width: 767px) {
+  figure { width: 250px; }
+}
+
+@media screen and (max-width: 479px) {
+  figure { width: 90px; }
+}
+
+/* Rich text (Webflow's .w-richtext): body copy that comes from Markdown.
+   Same clearfix as .container. */
+.rich-text::before,
+.rich-text::after {
+  content: " ";
+  display: table;
+  grid-area: 1 / 1 / 2 / 2;
+}
+
+.rich-text::after {
+  clear: both;
+}
+
+.rich-text ol,
+.rich-text ul {
+  overflow: hidden;
+}
