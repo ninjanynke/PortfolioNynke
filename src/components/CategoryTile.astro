@@ -51,27 +51,41 @@ const { title, colour, logo, logoHover } = category.data;
     transition: all 0.625s;
   }
 
+  /* White layer that fades in over the category colour when active. */
+  .tile::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background-color: #fff;
+    opacity: 0;
+    transition: opacity 300ms;
+  }
+
   .tile-inner {
+    position: relative;
     opacity: 1;
     transition: all 0.45s;
   }
 
+  /* Both logos share one grid cell, so they are always the same size and
+     position. (The live site pins the filled logo to the container's edges,
+     which stretches it between 380–479px and 740–780px.) */
   .logo-stack {
-    position: relative;
-    display: flex;
-    justify-content: flex-start;
+    display: grid;
+    justify-items: start;
   }
 
-  .logo-outline {
-    position: relative;
-    z-index: 2;
+  .logo-outline,
+  .logo-filled {
+    grid-area: 1 / 1;
+    width: 168px;
+    max-width: 100%;
+    height: auto;
     overflow: visible;
   }
 
   .logo-filled {
-    position: absolute;
-    inset: 0;
-    z-index: 2;
     opacity: 0;
   }
 
@@ -95,41 +109,46 @@ const { title, colour, logo, logoHover } = category.data;
     font-family: var(--font-ui);
   }
 
-  /* Animations, matching the Webflow interactions:
-     - logo cross-fade, 500 ms: on hover from 768px up, and on phones when
-       the tile scrolls into view (TileScrollFill toggles .is-filled)
-     - white title fades out on hover, 100 ms, revealing the coloured one */
+  /* Active state, one look at every width (a deliberate change from the live
+     site, which only did this from 768px up):
+     - tile fades to white with a soft shadow
+     - logo cross-fades to the coloured-in version, 500 ms
+     - white title fades out, 100 ms, revealing the coloured one
+     Triggered by hover on devices that can hover, and by scrolling on
+     touch screens and narrow windows (the script on the home page toggles
+     .is-active). */
   .logo-outline,
   .logo-filled {
     transition: opacity 500ms;
   }
 
-  .tile.is-filled .logo-filled { opacity: 1; }
-  .tile.is-filled .logo-outline { opacity: 0; }
-
   .label-white {
     transition: opacity 100ms;
   }
 
-  .tile:hover .label-white {
-    opacity: 0;
-  }
-
-  /* Hover turns the tile white with a soft shadow (inline background colour
-     stays underneath, so on phones only the shadow shows). */
-  .tile:hover {
+  .tile.is-active {
     box-shadow: 3px 3px 10px 1px var(--box-shadow);
-    background-image: linear-gradient(#fff, #fff);
   }
 
-  @media screen and (min-width: 768px) {
+  .tile.is-active::before { opacity: 1; }
+  .tile.is-active .logo-filled { opacity: 1; }
+  .tile.is-active .logo-outline { opacity: 0; }
+  .tile.is-active .label-white { opacity: 0; }
+
+  @media (hover: hover) {
+    .tile:hover {
+      box-shadow: 3px 3px 10px 1px var(--box-shadow);
+    }
+
+    .tile:hover::before { opacity: 1; }
     .tile:hover .logo-filled { opacity: 1; }
     .tile:hover .logo-outline { opacity: 0; }
+    .tile:hover .label-white { opacity: 0; }
   }
 
   @media screen and (max-width: 991px) {
     .logo-stack {
-      justify-content: center;
+      justify-items: center;
     }
 
     .tile-inner {
@@ -138,10 +157,6 @@ const { title, colour, logo, logoHover } = category.data;
   }
 
   @media screen and (max-width: 767px) {
-    .tile:hover {
-      background-image: none;
-    }
-
     .tile-inner {
       width: 50%;
     }

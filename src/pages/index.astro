@@ -33,18 +33,52 @@ const categories = (await getCollection('categories')).sort((a, b) => a.data.ord
 </BaseLayout>
 
 <script>
-  // On phones there is no hover, so the logo fills in when a tile is scrolled
-  // halfway into view (Webflow: scroll into view, 50% offset; out at 49%).
-  const phone = window.matchMedia('(max-width: 767px)');
+  // Where there is no hover (touch screens) or the window is narrow, the tile
+  // crossing the middle of the screen becomes active instead: a zero-height
+  // line at 50% of the viewport, so tiles light up one row at a time.
+  // Tiles only light up while the visitor is scrolling: nothing is active on
+  // page load, and the active tile goes back to rest after IDLE_MS without
+  // scrolling. Scrolling again (either way) lights up the middle tile again.
+  const IDLE_MS = 2000;
+  const scrollMode = window.matchMedia('(hover: none), (max-width: 767px)');
+  const tiles = document.querySelectorAll('[data-tile]');
+  const inMiddle = new Set<Element>();
+  let scrolling = false;
+  let idleTimer: number | undefined;
+
+  const update = () => {
+    const on = scrollMode.matches && scrolling;
+    tiles.forEach((tile) => tile.classList.toggle('is-active', on && inMiddle.has(tile)));
+  };
+
   const observer = new IntersectionObserver(
     (entries) => {
       for (const entry of entries) {
-        entry.target.classList.toggle('is-filled', phone.matches && entry.isIntersecting);
+        if (entry.isIntersecting) inMiddle.add(entry.target);
+        else inMiddle.delete(entry.target);
       }
+      update();
     },
-    { rootMargin: '0px 0px -50% 0px' },
+    { rootMargin: '-50% 0px -50% 0px' },
   );
-  document.querySelectorAll('[data-tile]').forEach((tile) => observer.observe(tile));
+  tiles.forEach((tile) => observer.observe(tile));
+
+  window.addEventListener(
+    'scroll',
+    () => {
+      if (!scrolling) {
+        scrolling = true;
+        update();
+      }
+      window.clearTimeout(idleTimer);
+      idleTimer = window.setTimeout(() => {
+        scrolling = false;
+        update();
+      }, IDLE_MS);
+    },
+    { passive: true },
+  );
+  scrollMode.addEventListener('change', update);
 </script>
 
 <style>

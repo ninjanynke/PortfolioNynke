@@ -109,6 +109,24 @@ Webflow CDN URLs remain. See `README.md` for usage and the field mapping.
   category page → project page. Per template: build, compare against the reference, list the
   differences, get sign-off, then ask before committing.
 
+## Deliberate changes from the live site
+
+Pixel-perfect is the default; these differ on purpose (owner's decision):
+
+- **Home tiles, active state everywhere.** Live only turns tiles white and
+  fills the logo on hover from 768px up. Now one active look at every width
+  (white fade 300 ms, shadow, logo cross-fade 500 ms, coloured title),
+  triggered by hover where the device can hover, and on touch screens or
+  windows under 768px by the tile crossing the middle of the viewport, but
+  only while the visitor is scrolling: nothing is active on page load, and
+  the tile goes back to rest after 2 s without scrolling (`IDLE_MS` in
+  `src/pages/index.astro`).
+  Note: the live reference shots at 600/375 show the top logos filled,
+  because the capture scrolled and triggered the live site's own effect.
+- **Home tile logos always the same size.** Live stretches the filled logo
+  wider than the outline between 380–479px and 740–780px.
+- © year is the current year; About me age is 30.
+
 ## Reference capture
 
 `reference/` is the archive of the live site, so the rebuild has a reference
