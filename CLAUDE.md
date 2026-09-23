@@ -73,10 +73,16 @@ Webflow CDN URLs remain. See `README.md` for usage and the field mapping.
   up and is the same size as `design_walkingtext.json` (26,703 bytes); it is the
   only asset from the second project. The four `*_walkingtext.json` Lotties
   are in `webflow-assets-2026-09-23/`.
-- Several live pages render broken: the WaterRower project shows "No pictures
-  found", its conclusion is empty, and some image links resolve to `#`. Fix
-  during the rebuild rather than reproducing the breakage.
-- Footer says © 2021. About me says "27 years old" and is stale. CV is 2024.
+- ~~Several live pages render broken~~: checked 2026-09-23, **they don't**.
+  "No pictures found." is Webflow's hidden empty-state text (in all 33 project
+  pages, never visible); `href="#"` links are Webflow lightboxes (clicking an
+  image opens it large, so the rebuild needs a lightbox too); 16 projects
+  simply have no conclusion, which is fine: sections without content are
+  hidden. YouTube embeds load late, so they show as blank space in
+  `reference/shots/`; they work on the live site.
+- Footer says © 2021: show the current year (2026) instead. About me says
+  "27 years old": Nynke is 30 now (2026). CV is 2024. Layout is pixel-perfect;
+  stale text like this is fixed rather than copied.
 - Videos are YouTube behind Embedly wrappers. `migrate.py` extracts the video
   ID; use a plain iframe or `lite-youtube-embed`.
 - Reference collections (types, tags, skills) were flattened to strings —
@@ -120,8 +126,11 @@ after Webflow is cancelled. `node scripts/capture-reference.mjs [paths…]`
 The live site is published from Webflow project `5f36f3d3…`; the CMS images
 sit on `5f3a5425…`.
 
-pixelmatch + pngjs are installed for pixel-diffing the rebuild against
-`shots/`.
+`node scripts/compare.mjs <local path> <reference name> [header,footer,full]`
+pixel-diffs the running dev server against `shots/` at all four widths and
+writes red-highlighted diffs to `reference/diff/` (gitignored).
+`node scripts/css-rules.mjs .class …` prints every Webflow CSS rule for the
+given selectors, per breakpoint: the fastest way to get exact values.
 
 ## Build order
 
@@ -131,7 +140,13 @@ pixelmatch + pngjs are installed for pixel-diffing the rebuild against
 3. ~~`npm create astro@latest`, drop in `content.config.ts`, get the content
    collections validating.~~ Done: 34 projects, 4 categories, all 170 images
    processed by `astro build` without warnings.
-4. Layout + footer from `src/data/footer.json`.
+4. ~~Layout + footer from `src/data/footer.json`.~~ Done: `BaseLayout.astro`,
+   `SiteHeader.astro`, `SiteFooter.astro`, tokens in `src/styles/tokens.css`.
+   Header and footer are pixel-identical to the live site at all four widths
+   (footer differs only by the intended © year). The CV is served from
+   `/cv/nynke-zwart-cv.pdf`; replace that file to update it. Page titles are
+   `<title> | Portfolio Nynke` (the live site uses "Portfolio Nynke" for
+   almost every page).
 5. Project page template. Frontmatter carries metadata, cover, gallery and the
    side-by-side `methodPair`; the Markdown body carries method text, the
    full-width image and the conclusion, already in the right order.

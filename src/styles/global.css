@@ -1,0 +1,73 @@
+/* Base styles: the parts of Webflow's normalize and defaults the site relies
+   on, without the rest of Webflow's framework CSS. */
+
+@import "./tokens.css";
+
+html {
+  height: 100%;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+body {
+  min-height: 100%;
+  margin: 0;
+  color: var(--text);
+  background-color: var(--background);
+  font-family: var(--font-fallback);
+  font-size: 14px;
+  line-height: 20px;
+}
+
+img {
+  max-width: 100%;
+  vertical-align: middle;
+  display: inline-block;
+  border: 0;
+}
+
+a {
+  color: var(--dim-grey);
+  background-color: transparent;
+  text-align: left;
+  text-decoration: none;
+  font-family: var(--font-ui);
+  font-weight: 600;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  margin-bottom: 10px;
+  font-weight: bold;
+}
+
+h2 {
+  margin-top: 20px;
+  font-size: 32px;
+  line-height: 36px;
+}
+
+/* Centred column. The empty table pseudo-elements are Webflow's clearfix;
+   they also stop children's margins collapsing through the container, which
+   the layout depends on. */
+.container {
+  max-width: var(--container);
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.container::before,
+.container::after {
+  content: " ";
+  display: table;
+  grid-area: 1 / 1 / 2 / 2;
+}
+
+.container::after {
+  clear: both;
+}
+
+.list-reset {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}

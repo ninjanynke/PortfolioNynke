@@ -1,0 +1,147 @@
+---
+import type { ImageMetadata } from 'astro';
+import links from '../data/footer.json';
+
+// footer.json stores icon paths relative to src/data/ ("../assets/footer/x"),
+// which is the same relative path from src/components/, so they are glob keys.
+const icons = import.meta.glob<{ default: ImageMetadata }>('../assets/footer/*', { eager: true });
+const iconFor = (path: string) => icons[path]?.default;
+
+const year = new Date().getFullYear();
+---
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-row">
+      <div class="footer-links">
+        <h2 class="footer-heading">Spot me in other places!</h2>
+        <ul class="footer-icons list-reset">
+          {links.map((link) => {
+            const icon = iconFor(link.icon);
+            return (
+              <li class="footer-icon">
+                <a href={link.url} target="_blank" rel="noopener" class="footer-icon-link" aria-label={link.name}>
+                  {icon && <img src={icon.src} width="40" alt="" loading="lazy" class="footer-icon-img" />}
+                </a>
+              </li>
+            );
+          })}
+        </ul>
+      </div>
+    </div>
+    <div class="copyright">© {year} (Nynke Zwart)</div>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    align-items: flex-start;
+    padding-top: 20px;
+    padding-bottom: 40px;
+    text-align: center;
+  }
+
+  .footer-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 40px;
+    text-align: left;
+  }
+
+  .footer-links {
+    flex: 1;
+  }
+
+  .footer-heading {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    margin-top: 0;
+    margin-bottom: 20px;
+    color: var(--dim-grey);
+    font-family: var(--font-ui);
+    font-size: 12px;
+    font-weight: 700;
+    line-height: 1.5;
+  }
+
+  .footer-icons {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    grid-template-rows: auto auto;
+    grid-auto-columns: 1fr;
+    gap: 16px;
+    padding-left: 15%;
+    padding-right: 15%;
+  }
+
+  .footer-icon {
+    justify-self: center;
+    transition: all 0.2s cubic-bezier(0.111, 0.395, 0.579, 0.962);
+  }
+
+  .footer-icon:hover {
+    opacity: 1;
+    transform: scale(1.2);
+  }
+
+  .footer-icon-link {
+    display: inline-block;
+    max-width: 100%;
+  }
+
+  .footer-icon-img {
+    margin-left: 10px;
+    margin-right: 10px;
+  }
+
+  .copyright {
+    color: var(--dark-grey);
+    font-family: var(--font-ui);
+    font-size: 12px;
+    font-weight: 500;
+    line-height: 20px;
+  }
+
+  @media screen and (max-width: 991px) {
+    .site-footer {
+      padding-left: 20px;
+      padding-right: 20px;
+    }
+  }
+
+  @media screen and (max-width: 767px) {
+    .site-footer {
+      padding: 40px 20px;
+    }
+  }
+
+  @media screen and (max-width: 479px) {
+    .site-footer {
+      text-align: left;
+    }
+
+    .footer-row {
+      flex-direction: column;
+    }
+
+    .footer-heading {
+      margin-top: 20px;
+    }
+
+    .footer-icons {
+      grid-template-columns: repeat(3, 1fr);
+      justify-items: stretch;
+      padding-top: 0;
+      padding-bottom: 0;
+    }
+
+    .footer-icon {
+      margin-top: 10px;
+    }
+
+    .copyright {
+      text-align: center;
+    }
+  }
+</style>

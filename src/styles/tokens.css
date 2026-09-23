@@ -1,0 +1,30 @@
+/* Design tokens. Values come from the Webflow stylesheet archived in
+   reference/webflow/, so the rebuild matches the old site pixel for pixel.
+   A reskin starts here. */
+
+:root {
+  /* Colours (Webflow's named swatches) */
+  --dim-grey: #4e4e4e;
+  --dark-grey: #b3b3b3;
+  --box-shadow: #ececec;
+  --text: #333;
+  --background: #fff;
+
+  /* Type */
+  --font-ui: Montserrat, sans-serif;
+  --font-body: Esteban, sans-serif;
+  --font-fallback: Arial, "Helvetica Neue", Helvetica, sans-serif;
+
+  /* Layout: Webflow's container widths per breakpoint.
+     Breakpoints themselves can't be custom properties in media queries:
+     991px (tablet), 767px (landscape phone), 479px (phone). */
+  --container: 940px;
+}
+
+@media screen and (max-width: 991px) {
+  :root { --container: 728px; }
+}
+
+@media screen and (max-width: 479px) {
+  :root { --container: none; }
+}
