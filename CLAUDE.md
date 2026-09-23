@@ -125,7 +125,8 @@ Pixel-perfect is the default; these differ on purpose (owner's decision):
   because the capture scrolled and triggered the live site's own effect.
 - **Home tile logos always the same size.** Live stretches the filled logo
   wider than the outline between 380–479px and 740–780px.
-- © year is the current year; About me age is 30.
+- © year is the current year; About me age is 30; double space in "working
+  as" removed.
 
 ## Reference capture
 
@@ -149,10 +150,13 @@ sit on `5f3a5425…`.
 
 `node scripts/compare.mjs <local path> <reference name> [header,footer,full]`
 pixel-diffs the running dev server against `shots/` at all four widths and
-writes red-highlighted diffs to `reference/diff/` (gitignored). Set
+writes red-highlighted diffs to `reference/diff/` (gitignored). `--live`
+diffs against the live site itself, with Lottie animations on both sides
+frozen on the same frame (`--frame=N`): needed for animated pages. Set
 `LOCAL_URL=http://localhost:4322` to diff a production build served by
 `npx astro preview --port 4322` instead: the dev server caches rendered
-Markdown and can serve stale output after config changes.
+Markdown and can serve stale output after config changes, and doesn't
+notice newly created content files until it is restarted.
 `node scripts/css-rules.mjs .class …` prints every Webflow CSS rule for the
 given selectors, per breakpoint: the fastest way to get exact values.
 
@@ -175,7 +179,11 @@ given selectors, per breakpoint: the fastest way to get exact values.
    collection), tiles in `CategoryTile.astro`. Full page identical to live
    apart from the © year; hover and phone scroll-fill end states identical.
    Hover is pure CSS; the phone scroll-fill is a small IntersectionObserver.
-6. About me (`/aboutme`): static, copied by hand; age is 30.
+6. ~~About me (`/aboutme`).~~ Done: text in `src/content/pages/aboutme.md`,
+   the photo-with-circles Lottie in `src/assets/lottie/about-me.json`, played
+   by `Lottie.astro` (lottie-web, MIT). Identical to live with the animation
+   frozen on the same frame, apart from the age, a double space fixed in
+   "working  as", and the © year.
 7. Category page template, themed by the category's `colour`.
 8. Project page template. Frontmatter carries metadata, cover, gallery and the
    side-by-side `methodPair`; the Markdown body carries method text, the
