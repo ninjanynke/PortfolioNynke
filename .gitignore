@@ -15,3 +15,5 @@ npm-debug.log*
 .idea/
 # Reference screenshots stay local (87 MB); recreate with scripts/capture-reference.mjs
 reference/shots/
+# Pixel-diff output from scripts/compare.mjs
+reference/diff/
