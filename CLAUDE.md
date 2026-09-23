@@ -82,6 +82,47 @@ Webflow CDN URLs remain. See `README.md` for usage and the field mapping.
 - Reference collections (types, tags, skills) were flattened to strings —
   they held only a name and a slug. 8 types, 21 tags, 59 skills.
 
+## Rebuild approach (decided 2026-09-23)
+
+- **Pixel-perfect copy** of the live site first; redesign comes later.
+- **Clean rebuild, not a copy of Webflow's markup.** Take exact values (fonts,
+  colours, sizes, spacing, breakpoints 991/767/479) from Webflow's stylesheet
+  into CSS custom properties, and write semantic Astro components. Don't paste
+  Webflow's generated class soup or depend on webflow.js.
+- **Match the animations closely.** From webflow.js's interaction data there
+  are only: logo cross-fade on hover (500 ms, home tiles), tag fade on hover
+  (500 ms), white title fade on scroll into/out of view (100 ms), and the
+  Lottie walking text on category pages (`lottie-web`, MIT).
+- **Fonts bundled** via Fontsource (OFL), not loaded from Google. Used:
+  Montserrat 200/400/500/600/700 and Esteban 400. Bitter is loaded by the old
+  site but used in only one rule; check before bundling it.
+- **Order:** shared layout + footer → project page → category page → home →
+  about me. Per template: build, compare against the reference, list the
+  differences, get sign-off, then ask before committing.
+
+## Reference capture
+
+`reference/` is the archive of the live site, so the rebuild has a reference
+after Webflow is cancelled. `node scripts/capture-reference.mjs [paths…]`
+(re)creates it with Playwright driving the local Chrome:
+
+- `shots/<1280|900|600|375>/<page>.png`: full-page screenshots, one width
+  per breakpoint range. 39 pages (tikkie is a draft, so not live).
+  **Local only** (gitignored, 87 MB), on the owner's laptop. They can only
+  be recreated while the live site is up, so don't cancel Webflow without
+  deciding where they'll be kept.
+- `html/`: raw HTML of each page.
+- `webflow/`: the site stylesheet and `webflow.js` (holds the interaction
+  definitions under `Webflow.require('ix2').init(...)`).
+- `assets/`: files placed directly on pages, outside the CMS: logo, quote
+  mark, arrows, Lotties.
+
+The live site is published from Webflow project `5f36f3d3…`; the CMS images
+sit on `5f3a5425…`.
+
+pixelmatch + pngjs are installed for pixel-diffing the rebuild against
+`shots/`.
+
 ## Build order
 
 1. ~~Run `migrate.py`, confirm all 179 assets downloaded, commit.~~ Done.
