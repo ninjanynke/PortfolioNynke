@@ -1,7 +1,7 @@
 # nynkezwart.com — Webflow to Astro migration
 
-Context for anyone (including Claude) picking this up. Content is migrated
-(step 1 done); no Astro project yet.
+Context for anyone (including Claude) picking this up. Steps 1 and 3 are done:
+content is migrated and validates in Astro. No templates yet.
 
 ## Goal
 
@@ -17,7 +17,7 @@ mean touching the content files.
 
 ## Stack
 
-- **Astro** (v5/v6), MIT licensed. Content Collections for the CMS layer.
+- **Astro** 7 (7.3.4 at setup), MIT licensed. Content Collections for the CMS layer.
 - Markdown + frontmatter for content, validated by `src/content.config.ts`.
 - **GitHub Pages** for hosting, custom domain, free HTTPS.
 - No CSS framework chosen yet. No JS framework needed — the site is documents.
@@ -60,7 +60,6 @@ Webflow CDN URLs remain. See `README.md` for usage and the field mapping.
 - `asset-manifest.tsv` lists each CDN URL and where it landed.
   `download-assets.sh` is a curl-only fallback that refills `assets/webflow/`
   (it only works while Webflow's CDN is still up).
-- `content.config.ts` sits in the repo root until step 3 moves it to `src/`.
 - Python deps live in `.venv/` (`requests`, plus `pyyaml` for checking).
 
 ## Known issues in the source content
@@ -86,13 +85,18 @@ Webflow CDN URLs remain. See `README.md` for usage and the field mapping.
 ## Build order
 
 1. ~~Run `migrate.py`, confirm all 179 assets downloaded, commit.~~ Done.
-2. Cancel Webflow.
-3. `npm create astro@latest`, drop in `content.config.ts`, get the content
-   collections validating.
+2. Cancel Webflow. **On hold** until the rebuild matches the old site's look and
+   feel; Webflow is the reference until then.
+3. ~~`npm create astro@latest`, drop in `content.config.ts`, get the content
+   collections validating.~~ Done: 34 projects, 4 categories, all 170 images
+   processed by `astro build` without warnings.
 4. Layout + footer from `src/data/footer.json`.
 5. Project page template. Frontmatter carries metadata, cover, gallery and the
    side-by-side `methodPair`; the Markdown body carries method text, the
    full-width image and the conclusion, already in the right order.
+   **GIFs:** 22 project images are GIFs, and `<Image>` converts them to a
+   single-frame WebP. Render GIFs with a plain `<img src={img.src}>` (or
+   `format="gif"`) so they keep animating.
 6. Category page template, themed by the category's `colour`.
 7. Home page.
 8. Deploy to GitHub Pages, add `CNAME`, point DNS, verify old URLs resolve.
