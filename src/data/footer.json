@@ -1,0 +1,37 @@
+[
+  {
+    "name": "Email",
+    "url": "mailto:nynkezwart@hotmail.com",
+    "icon": "../assets/footer/email.svg"
+  },
+  {
+    "name": "LinkedIn",
+    "url": "https://www.linkedin.com/in/nynkezwart",
+    "icon": "../assets/footer/linkedin.svg"
+  },
+  {
+    "name": "Github",
+    "url": "https://github.com/ninjanynke",
+    "icon": "../assets/footer/github.svg"
+  },
+  {
+    "name": "Dribbble",
+    "url": "https://dribbble.com/ninjanynke",
+    "icon": "../assets/footer/dribbble.svg"
+  },
+  {
+    "name": "YouTube",
+    "url": "https://www.youtube.com/user/GreenePearl",
+    "icon": "../assets/footer/youtube.svg"
+  },
+  {
+    "name": "Redbubble",
+    "url": "https://www.redbubble.com/people/obsessivegeek/shop",
+    "icon": "../assets/footer/redbubble.svg"
+  },
+  {
+    "name": "Instagram",
+    "url": "https://www.instagram.com/nynke.zwart/",
+    "icon": "../assets/footer/logoinsta.png"
+  }
+]
