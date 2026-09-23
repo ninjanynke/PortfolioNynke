@@ -13,3 +13,5 @@ npm-debug.log*
 .env
 .env.production
 .idea/
+# Reference screenshots stay local (87 MB); recreate with scripts/capture-reference.mjs
+reference/shots/
