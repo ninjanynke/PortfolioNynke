@@ -44,7 +44,7 @@ build time.
 
 ## Then
 
-Copy `content.config.ts` to `src/content.config.ts`. It defines the schema the
+`src/content.config.ts` defines the schema the
 generated frontmatter expects, and replaces the field editor Webflow gave you:
 a bad category slug or a missing image becomes a build error instead of a
 broken page.

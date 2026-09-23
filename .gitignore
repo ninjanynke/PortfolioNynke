@@ -9,3 +9,7 @@ dist/
 .venv/
 # Local-only backup of the Webflow CDN; see CLAUDE.md
 assets/webflow/
+npm-debug.log*
+.env
+.env.production
+.idea/
