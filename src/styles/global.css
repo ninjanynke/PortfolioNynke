@@ -8,6 +8,36 @@
   box-sizing: border-box;
 }
 
+/* Moving between pages: the old page stays until the new one is ready,
+   then crossfades into it, instead of a blank flash and a fresh paint.
+   Parts that are the same on both pages (the header) don't visibly change.
+   Browsers without support (Firefox, for now) just navigate as before. */
+@view-transition {
+  navigation: auto;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  @view-transition {
+    navigation: none;
+  }
+}
+
+/* The header (named in SiteHeader.astro) sits out the crossfade: nothing
+   in it animates. Both the old and the new header are drawn fully opaque,
+   the old page's snapshot on top. Normally that snapshot (logo already
+   drawn) covers the identical new header, whose logo can take a frame to
+   appear. If a quick series of clicks leaves no snapshot, the new header
+   shows instead, so the header is never blank. */
+::view-transition-group(site-header),
+::view-transition-old(site-header),
+::view-transition-new(site-header) {
+  animation: none;
+}
+
+::view-transition-old(site-header) {
+  z-index: 1;
+}
+
 html {
   height: 100%;
   -webkit-text-size-adjust: 100%;
