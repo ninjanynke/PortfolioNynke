@@ -11,6 +11,7 @@ skills:
   - "Pattern making"
   - "Planning"
 startDate: "2019-04-01"
+created: "2021-12-21T07:33:27Z"
 featured: true
 featuredTag: "Do It Yourself"
 cover: "./making-my-own-clothes/images/img_1004-2.jpg"

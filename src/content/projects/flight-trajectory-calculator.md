@@ -12,6 +12,7 @@ skills:
   - "Storyboards"
   - "Xcode"
 startDate: "2021-09-01"
+created: "2021-12-27T10:34:22Z"
 featured: true
 featuredTag: "Object oriented programming"
 cover: "./flight-trajectory-calculator/images/screenshot-2022-01-07-at-10.02.16.png"

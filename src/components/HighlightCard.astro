@@ -1,0 +1,101 @@
+---
+import type { CollectionEntry } from 'astro:content';
+
+interface Props {
+  project: CollectionEntry<'projects'>;
+  colour: string;
+}
+
+const { project, colour } = Astro.props;
+const { title, summary, highlightSummary, cover, type, featuredTag, startDate } = project.data;
+const tags = [featuredTag, type].filter(Boolean);
+---
+
+<li data-highlight>
+  <a href={`/projects/${project.id}`} class="highlight">
+    <div class="highlight-card">
+      <div>
+        <div class="highlight-image" style={cover ? `background-image: url("${cover.src}")` : undefined}></div>
+        <div class="highlight-title" style={`border-color: ${colour}`}>{title}</div>
+        <p class="highlight-summary">{highlightSummary ?? summary}</p>
+      </div>
+      <div class="highlight-tags">
+        {tags.map((tag) => <div class="tag" style={`background-color: ${colour}`}>{tag}</div>)}
+        {startDate && <div class="tag tag-last" style={`background-color: ${colour}`}>{startDate.getFullYear()}</div>}
+      </div>
+    </div>
+  </a>
+</li>
+
+<style>
+  .highlight {
+    display: inline-block;
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .highlight-card {
+    padding: 20px;
+    border-radius: 10px;
+    transition: box-shadow 0.2s linear;
+  }
+
+  /* Active: shadow fades in (200 ms). Triggered by hover on devices that
+     can hover, and by scrolling on touch screens and narrow windows
+     (scroll-activate.ts toggles .is-active). */
+  li.is-active .highlight-card {
+    box-shadow: 3px 3px 10px 1px var(--box-shadow);
+  }
+
+  @media (hover: hover) {
+    .highlight-card:hover {
+      box-shadow: 3px 3px 10px 1px var(--box-shadow);
+    }
+  }
+
+  .highlight-image {
+    width: 100%;
+    padding-bottom: 50%;
+    border-radius: 5px;
+    background-position: 50%;
+    background-repeat: no-repeat;
+    background-size: cover;
+  }
+
+  .highlight-title {
+    display: inline-block;
+    margin-top: 20px;
+    margin-bottom: 10px;
+    border-bottom: 1px solid #000;
+    color: #000;
+    font-family: var(--font-ui);
+  }
+
+  .highlight-summary {
+    color: #000;
+    font-weight: 400;
+  }
+
+  .highlight-tags {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+  }
+
+  .tag {
+    display: inline-block;
+    margin-right: 10px;
+    margin-bottom: 5px;
+    padding-left: 10px;
+    padding-right: 10px;
+    border-radius: 5px;
+    color: #fff;
+    text-transform: lowercase;
+    font-family: var(--font-ui);
+  }
+
+  .tag-last {
+    display: block;
+    margin-right: 0;
+  }
+</style>

@@ -11,6 +11,7 @@ skills:
   - "Digital drawing"
 startDate: "2019-11-01"
 endDate: "2020-07-01"
+created: "2021-12-20T21:29:41Z"
 featured: false
 featuredTag: "Design"
 cover: "./birthday-calender/images/screenshot-2021-12-21-at-11.01.34.png"

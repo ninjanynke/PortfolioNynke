@@ -12,6 +12,7 @@ skills:
   - "Concepting"
 startDate: "2019-04-01"
 endDate: "2019-06-01"
+created: "2021-12-20T19:46:36Z"
 featured: false
 featuredTag: "Embodied interaction"
 cover: "./designing-for-non-verbal-graphical-user-interfaces/images/screenshot-2022-01-04-at-20.03.06.png"

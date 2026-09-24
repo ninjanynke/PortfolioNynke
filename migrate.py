@@ -374,6 +374,28 @@ def parse_date(value: str | None) -> str | None:
         return None
 
 
+def parse_datetime(value: str | None) -> str | None:
+    """'Mon Dec 20 2021 15:54:48 GMT+0000 (...)' -> '2021-12-20T15:54:48Z'."""
+    if not value:
+        return None
+    try:
+        return datetime.strptime(value[:24].strip(), "%a %b %d %Y %H:%M:%S").strftime("%Y-%m-%dT%H:%M:%SZ")
+    except ValueError:
+        return None
+
+
+def highlight_summary(row: dict) -> str | None:
+    """Webflow's highlight cards show "Highlighted text", a separate field
+    that is almost always a copy of the summary. Keep it only where it
+    really differs (zero-width characters aside)."""
+    highlight = html_to_plain(row.get("Highlighted text"))
+    summary = html_to_plain(row.get("Project short summary"))
+    invisible = re.compile("[\u200b-\u200d\ufeff]")
+    if not highlight or invisible.sub("", highlight).strip() == invisible.sub("", summary).strip():
+        return None
+    return highlight
+
+
 def split_refs(value: str | None) -> list[str]:
     if not value:
         return []
@@ -474,12 +496,16 @@ def main() -> None:
         fm = {
             "title": title,
             "summary": html_to_plain(row.get("Project short summary")),
+            "highlightSummary": highlight_summary(row),
             "category": category,
             "type": types.get(row.get("Project type", ""), row.get("Project type") or None),
             "tags": [tags.get(s, s) for s in split_refs(row.get("Project tags"))],
             "skills": [skills.get(s, s) for s in split_refs(row.get("Project skills learnt"))],
             "startDate": parse_date(row.get("Project start date")),
             "endDate": parse_date(row.get("Project end date")),
+            # When the project was added to the portfolio. Category pages sort
+            # on it (newest first), as Webflow did with "Created On".
+            "created": parse_datetime(row.get("Created On")),
             "featured": truthy(row.get("IsHighlightedProject")),
             "featuredTag": tags.get(
                 row.get("Highlighted project tag (1)", ""),

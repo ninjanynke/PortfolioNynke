@@ -5,6 +5,8 @@ order: 4
 colour: "#a3c485"
 logo: "./flower-outline/images/flower.svg"
 logoHover: "./flower-outline/images/flowerfilledin.svg"
+lottie: "./flower-outline/images/walking-text.json"
+arrow: "./flower-outline/images/arrow.svg"
 previous: "naai-outline"
 ---
 

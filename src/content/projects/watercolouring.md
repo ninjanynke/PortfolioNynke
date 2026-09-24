@@ -11,6 +11,7 @@ skills:
   - "Watercoloring"
 startDate: "2019-06-01"
 endDate: "2019-07-01"
+created: "2021-12-21T07:45:02Z"
 featured: false
 featuredTag: "Do It Yourself"
 cover: "./watercolouring/images/screenshot-2021-12-27-at-17.42.31.png"

@@ -10,6 +10,7 @@ skills:
   - "Painting"
 startDate: "2023-09-04"
 endDate: "2023-10-31"
+created: "2023-12-20T16:01:01Z"
 featured: false
 featuredTag: "Do It Yourself"
 cover: "./hallway-tile-project/images/ezgif-4-4199a3f7b7.gif"

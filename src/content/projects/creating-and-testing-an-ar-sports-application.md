@@ -15,6 +15,7 @@ skills:
   - "Vuforia"
 startDate: "2018-01-01"
 endDate: "2018-06-01"
+created: "2021-12-21T08:02:00Z"
 featured: false
 featuredTag: "Programming"
 cover: "./creating-and-testing-an-ar-sports-application/images/screenshot-2022-01-08-at-12.51.41.png"

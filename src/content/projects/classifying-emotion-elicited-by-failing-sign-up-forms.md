@@ -13,6 +13,7 @@ skills:
   - "Usability testing"
 startDate: "2019-02-01"
 endDate: "2019-06-01"
+created: "2021-12-21T08:09:18Z"
 featured: false
 featuredTag: "Machine Learning"
 cover: "./classifying-emotion-elicited-by-failing-sign-up-forms/images/failedformthumbnail.png"

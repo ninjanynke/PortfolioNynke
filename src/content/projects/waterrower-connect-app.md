@@ -16,6 +16,7 @@ skills:
   - "SQL"
 startDate: "2020-02-01"
 endDate: "2022-07-08"
+created: "2021-12-21T08:06:42Z"
 featured: true
 featuredTag: "Object oriented programming"
 cover: "./waterrower-connect-app/images/screenshot-2022-01-08-at-12.05.14.png"

@@ -1,6 +1,7 @@
 ---
 title: "UX/UI for WaterRower Connect"
 summary: "WaterRower Connect is an app created for the WaterRower rowing machine. It allows users to connect to their WaterRower and execute and analyse workouts. Besides front-end and back-end work I did on this app, I also created UI designs and thought out the user experience of it. Being a programmer as well helps me to figure out all edge cases for design. I use Figma to create all my mockups: I set up a design library using Figma, which helps to keep our design language consistent and also helps us save time when designing."
+highlightSummary: "WaterRower Connect is an app created for the WaterRower rowing machine. It allows users to connect to their WaterRower and execute and analyse workouts. Besides front-end and back-end work I did on this app, I also created UI designs and thought out the user experience of it."
 category: "design-outline"
 type: "Full time work"
 tags:
@@ -16,6 +17,7 @@ skills:
   - "Adobe After Effects"
 startDate: "2020-02-01"
 endDate: "2022-07-08"
+created: "2021-12-27T10:20:36Z"
 featured: true
 featuredTag: "UX Design"
 cover: "./ux-ui-for-waterrower-connect/images/screenshot-2022-01-08-at-12.05.14.png"

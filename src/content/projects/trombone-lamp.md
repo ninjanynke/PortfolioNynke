@@ -11,6 +11,7 @@ skills:
   - "Electronics"
 startDate: "2020-01-01"
 endDate: "2020-04-01"
+created: "2021-12-21T07:51:58Z"
 featured: false
 featuredTag: "Do It Yourself"
 cover: "./trombone-lamp/images/trombone-3.png"

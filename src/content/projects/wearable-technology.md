@@ -12,6 +12,7 @@ skills:
   - "Design iteration"
 startDate: "2019-02-01"
 endDate: "2019-06-01"
+created: "2021-12-21T07:40:47Z"
 featured: false
 featuredTag: "Do It Yourself"
 cover: "./wearable-technology/images/bowtie.gif"

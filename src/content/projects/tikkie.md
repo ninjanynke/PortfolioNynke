@@ -10,6 +10,7 @@ skills:
   - "Android Studo"
   - "Kotlin"
 startDate: "2022-09-05"
+created: "2023-12-20T15:07:20Z"
 featured: false
 featuredTag: "Programming"
 draft: true

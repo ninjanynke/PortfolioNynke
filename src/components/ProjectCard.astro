@@ -1,0 +1,186 @@
+---
+import type { CollectionEntry } from 'astro:content';
+
+interface Props {
+  project: CollectionEntry<'projects'>;
+  colour: string;
+}
+
+const { project, colour } = Astro.props;
+const { title, cover, type, featuredTag } = project.data;
+---
+
+<li class="card-slot" data-card>
+  <a href={`/projects/${project.id}`} class="card">
+    <div class="card-inner">
+      <div class="card-image" style={cover ? `background-image: url("${cover.src}")` : undefined}>
+        <div class="card-veil">
+          <div class="card-tags">
+            {[type, featuredTag].filter(Boolean).map((tag) => (
+              <div class="card-tag" data-tag style={`--tag-colour: ${colour}`}>
+                <span class="card-tag-text">{tag}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+      <div class="card-title-box">
+        <div class="card-title">{title}</div>
+      </div>
+    </div>
+  </a>
+</li>
+
+<script>
+  import { splitTagLines } from '../scripts/tag-lines';
+  splitTagLines('[data-tag]');
+</script>
+
+<style>
+  /* 5:6 slot: image on top (80%), title underneath. */
+  .card-slot {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 100%;
+    padding-bottom: 120%;
+  }
+
+  .card {
+    position: absolute;
+    display: inline-block;
+    width: 100%;
+    height: 100%;
+    max-width: 100%;
+  }
+
+  .card-inner {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    opacity: 1;
+  }
+
+  .card-image {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    height: 80%;
+    overflow: hidden;
+    border: 1px solid var(--dark-grey);
+    border-radius: 5px;
+    background-position: 50%;
+    background-size: cover;
+  }
+
+  .card-veil {
+    width: 100%;
+    height: 100%;
+    background-color: rgba(255, 255, 255, 0.35);
+    transition: background-color 0.2s;
+  }
+
+  /* Active: veil clears (200 ms) and tags fade in (500 ms). */
+  .card-slot.is-active .card-veil {
+    background-color: rgba(255, 255, 255, 0);
+  }
+
+  .card-slot.is-active .card-tag {
+    opacity: 1;
+  }
+
+  .card-tags {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+  }
+
+  /* Tags hidden and image veiled at rest. Active state, one look at every
+     width (a deliberate change from the live site, which only did this from
+     992px up): triggered by hover on devices that can hover, and by
+     scrolling on touch screens and narrow windows (scroll-activate.ts
+     toggles .is-active). */
+  /* Tags look exactly like the live site's on one line: a 20px pill, tags
+     10px apart. A tag that doesn't fit wraps at the spaces into one pill
+     per line, flush right, lines touching; tag-lines.ts splits the lines
+     and squares off the corners where they touch. Without the script,
+     box-decoration-break gives each wrapped line its own pill. */
+  .card-tag {
+    margin: 10px 10px 0;
+    text-align: right;
+    font-family: var(--font-ui);
+    line-height: 20px;
+    opacity: 0;
+    transition: opacity 500ms;
+  }
+
+  .card-tag :global(.card-tag-text),
+  .card-tag :global(.card-tag-line) {
+    padding: 1px 10px;
+    border-radius: 4px;
+    background-color: var(--tag-colour);
+    color: #fff;
+    text-transform: lowercase;
+    -webkit-box-decoration-break: clone;
+    box-decoration-break: clone;
+  }
+
+  .card-tag:global(.is-split) {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+  }
+
+  .card-tag :global(.card-tag-line) {
+    padding: 0 10px;
+    white-space: nowrap;
+  }
+
+  .card-tag :global(.sq-tl) { border-top-left-radius: 0; }
+  .card-tag :global(.sq-tr) { border-top-right-radius: 0; }
+  .card-tag :global(.sq-bl) { border-bottom-left-radius: 0; }
+  .card-tag :global(.sq-br) { border-bottom-right-radius: 0; }
+
+  .card-title-box {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 20%;
+  }
+
+  .card-title {
+    margin: 10px;
+    color: var(--dim-grey);
+    text-align: center;
+    font-family: var(--font-ui);
+    font-size: 12px;
+    font-weight: 600;
+  }
+
+  @media (hover: hover) {
+    .card-veil:hover {
+      background-color: rgba(255, 255, 255, 0);
+    }
+
+    .card:hover .card-tag {
+      opacity: 1;
+    }
+  }
+
+  @media screen and (max-width: 767px) {
+    .card-slot {
+      margin-bottom: 20px;
+    }
+  }
+
+  @media screen and (max-width: 479px) {
+    .card-title {
+      height: 40px;
+      overflow: hidden;
+    }
+  }
+</style>

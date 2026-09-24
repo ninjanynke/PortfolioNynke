@@ -13,6 +13,7 @@ skills:
   - "Clay sculpting"
 startDate: "2022-02-01"
 endDate: "2022-04-15"
+created: "2023-12-20T15:59:45Z"
 featured: false
 featuredTag: "Sewing"
 cover: "./bridal-guest-outfit/images/bridalcovergif.gif"

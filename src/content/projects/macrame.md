@@ -10,6 +10,7 @@ skills:
   - "Knotting"
   - "Planning"
 startDate: "2019-03-01"
+created: "2021-12-21T07:43:08Z"
 featured: false
 featuredTag: "Do It Yourself"
 cover: "./macrame/images/img_8550.jpg"

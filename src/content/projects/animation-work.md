@@ -13,6 +13,7 @@ skills:
   - "Adobe Flash"
 startDate: "2019-08-01"
 endDate: "2019-08-01"
+created: "2021-12-20T21:20:05Z"
 featured: false
 featuredTag: "Design"
 cover: "./animation-work/images/animation_crea_1.gif"

@@ -12,6 +12,7 @@ skills:
   - "Gamification"
 startDate: "2019-03-01"
 endDate: "2019-07-01"
+created: "2021-12-20T20:05:10Z"
 featured: false
 featuredTag: "Research"
 cover: "./gamification-of-asthma-spirometry-tests/images/img_2545.jpg"

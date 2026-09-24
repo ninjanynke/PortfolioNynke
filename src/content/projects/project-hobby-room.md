@@ -12,6 +12,7 @@ skills:
   - "Painting"
 startDate: "2023-07-11"
 endDate: "2023-09-27"
+created: "2023-12-20T15:50:29Z"
 featured: false
 featuredTag: "Do It Yourself"
 cover: "./project-hobby-room/images/p1090794b.jpg"

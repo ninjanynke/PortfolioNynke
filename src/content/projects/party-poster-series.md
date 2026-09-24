@@ -10,6 +10,7 @@ skills:
   - "Brand identity"
 startDate: "2017-08-01"
 endDate: "2018-08-01"
+created: "2021-12-20T21:25:48Z"
 featured: false
 featuredTag: "Design"
 cover: "./party-poster-series/images/beestfeest.gif"

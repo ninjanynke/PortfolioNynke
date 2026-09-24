@@ -16,6 +16,7 @@ skills:
   - "Concepting"
 startDate: "2019-09-01"
 endDate: "2019-12-01"
+created: "2021-12-20T19:31:53Z"
 featured: true
 featuredTag: "UX Design"
 cover: "./time-tracking-reports-redesign-in-keeping/images/socialmedia_nieuwerapporten2.png"
