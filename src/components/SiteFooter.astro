@@ -15,7 +15,7 @@ const year = new Date().getFullYear();
     <div class="footer-row">
       <div class="footer-links">
         <h2 class="footer-heading">Spot me in other places!</h2>
-        <ul class="footer-icons list-reset">
+        <ul class="footer-icons list-reset" style={`--icon-count: ${links.length}`}>
           {links.map((link) => {
             const icon = iconFor(link.icon);
             return (
@@ -67,7 +67,8 @@ const year = new Date().getFullYear();
 
   .footer-icons {
     display: grid;
-    grid-template-columns: repeat(7, 1fr);
+    /* One row with every icon; the count comes from footer.json. */
+    grid-template-columns: repeat(var(--icon-count), 1fr);
     grid-template-rows: auto auto;
     grid-auto-columns: 1fr;
     gap: 16px;
@@ -114,6 +115,16 @@ const year = new Date().getFullYear();
     .site-footer {
       padding: 40px 20px;
     }
+
+    /* Too narrow for one row of full-size icons: two even rows instead,
+       spaced like the phone layout's rows. */
+    .footer-icons {
+      grid-template-columns: repeat(4, 1fr);
+    }
+
+    .footer-icon {
+      margin-top: 10px;
+    }
   }
 
   @media screen and (max-width: 479px) {
@@ -134,10 +145,6 @@ const year = new Date().getFullYear();
       justify-items: stretch;
       padding-top: 0;
       padding-bottom: 0;
-    }
-
-    .footer-icon {
-      margin-top: 10px;
     }
 
     .copyright {

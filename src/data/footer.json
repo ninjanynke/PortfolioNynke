@@ -15,6 +15,11 @@
     "icon": "../assets/footer/github.svg"
   },
   {
+    "name": "Etsy",
+    "url": "https://www.etsy.com/shop/ClubKekeJewelry",
+    "icon": "../assets/footer/etsy.svg"
+  },
+  {
     "name": "Dribbble",
     "url": "https://dribbble.com/ninjanynke",
     "icon": "../assets/footer/dribbble.svg"
