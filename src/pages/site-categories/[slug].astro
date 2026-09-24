@@ -62,12 +62,7 @@ const others = projects
           )}
         </div>
       </div>
-      {lottieUrl && <Lottie
-          src={lottieUrl}
-          loop={false}
-          class:list={['walking-text', { 'walking-text-tucked': category.id === 'design-outline' }]}
-          label={`${label} projects`}
-        />}
+      {lottieUrl && <Lottie src={lottieUrl} loop={false} class="walking-text" label={`${label} projects`} />}
       <div class="nav-side">
         <div class="arrow-slot">
           {nextCategory && (
@@ -171,12 +166,6 @@ const others = projects
 
   .category-nav :global(.walking-text) {
     width: 160px;
-  }
-
-  /* On the live site only the Designer walking text (a separate Webflow
-     element) is pulled 4px closer to the content below. */
-  .category-nav :global(.walking-text-tucked) {
-    margin-bottom: -4px;
   }
 
   .section-heading {

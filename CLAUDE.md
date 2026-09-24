@@ -138,6 +138,19 @@ Pixel-perfect is the default; these differ on purpose (owner's decision):
   touching, with the touching corners squared (`src/scripts/tag-lines.ts`).
   Live showed one big block with a ragged right edge. One-line tags are
   unchanged.
+- **Smooth page changes.** Pages crossfade (CSS cross-document view
+  transitions in `global.css`; no router, no JS; Firefox navigates as
+  before). Nothing shifts while loading: fonts are preloaded in
+  `BaseLayout.astro`, and `Lottie.astro` holds each animation's space with
+  an empty SVG of the same size until lottie-web has drawn it. The header
+  sits out the crossfade at every width: old and new header both drawn
+  fully opaque, the old page's snapshot on top. The snapshot hides the new
+  logo's first-frame blink (it's ready 5–15 ms after the new page's first
+  frame); if quick clicking leaves no snapshot, the new header shows, so
+  the header is never blank.
+- **Category pages all line up.** Live pulls only Designer's walking text
+  4px up (a Webflow quirk), so "Highlights" sat 4px higher there. Now all
+  four pages use the same position, so switching categories doesn't jump.
 - © year is the current year; About me age is 30; double space in "working
   as" removed.
 

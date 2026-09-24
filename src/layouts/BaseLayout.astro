@@ -6,6 +6,10 @@ import '@fontsource/montserrat/600.css';
 import '@fontsource/montserrat/700.css';
 import '@fontsource/esteban/400.css';
 import '../styles/global.css';
+import montserrat400 from '@fontsource/montserrat/files/montserrat-latin-400-normal.woff2?url';
+import montserrat600 from '@fontsource/montserrat/files/montserrat-latin-600-normal.woff2?url';
+import montserrat700 from '@fontsource/montserrat/files/montserrat-latin-700-normal.woff2?url';
+import esteban400 from '@fontsource/esteban/files/esteban-latin-400-normal.woff2?url';
 import SiteHeader from '../components/SiteHeader.astro';
 import SiteFooter from '../components/SiteFooter.astro';
 
@@ -16,6 +20,10 @@ interface Props {
 
 const { title, description } = Astro.props;
 const fullTitle = title ? `${title} | Portfolio Nynke` : 'Portfolio Nynke';
+
+// Fetched right away rather than when the CSS asks for them, so text is
+// drawn in the right font from the first frame and doesn't shift.
+const preloadFonts = [montserrat400, montserrat600, montserrat700, esteban400];
 ---
 
 <!doctype html>
@@ -25,6 +33,7 @@ const fullTitle = title ? `${title} | Portfolio Nynke` : 'Portfolio Nynke';
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{fullTitle}</title>
     {description && <meta name="description" content={description} />}
+    {preloadFonts.map((href) => <link rel="preload" href={href} as="font" type="font/woff2" crossorigin />)}
     <link rel="icon" type="image/png" href="/favicon.png" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <meta name="generator" content={Astro.generator} />

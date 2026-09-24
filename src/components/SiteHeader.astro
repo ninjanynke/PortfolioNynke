@@ -9,7 +9,7 @@ const cvHref = '/cv/nynke-zwart-cv.pdf';
     <ul class="nav-grid list-reset">
       <li class="nav-home">
         <a href="/" class="home-link" aria-label="Nynke Zwart, home">
-          <img src={logo.src} alt="" class="nav-logo" />
+          <img src={logo.src} alt="" class="nav-logo" decoding="sync" />
           <span class="nav-name">NYNKE<br />ZWART</span>
         </a>
       </li>
@@ -81,6 +81,11 @@ const cvHref = '/cv/nynke-zwart-cv.pdf';
     font-size: 12px;
     font-weight: 700;
     transition: all 0.3s;
+  }
+
+  /* Kept still during page changes; see global.css. */
+  .site-header {
+    view-transition-name: site-header;
   }
 
   .header-shadow {

@@ -4,6 +4,8 @@
 // Pass the animation's URL, e.g. `import url from '../assets/x.json?url'`.
 // Size the element from the outside; the animation keeps its aspect ratio
 // and is centred inside it, like Webflow's Lottie element.
+// Until lottie-web has drawn the animation, an empty SVG of the same size
+// holds its place, so nothing on the page jumps when it appears.
 
 interface Props {
   src: string;
@@ -13,6 +15,12 @@ interface Props {
 }
 
 const { src, class: className, label, loop = true } = Astro.props;
+
+// The animation's own size (`w`, `h` in the JSON), read at build time.
+const urls = import.meta.glob<string>('/src/**/*.json', { query: '?url', import: 'default', eager: true });
+const data = import.meta.glob<{ w: number; h: number }>('/src/**/*.json', { eager: true });
+const file = Object.keys(urls).find((key) => urls[key] === src);
+const size = file ? data[file] : undefined;
 ---
 
 <div
@@ -23,6 +31,16 @@ const { src, class: className, label, loop = true } = Astro.props;
   aria-label={label}
   aria-hidden={label ? undefined : 'true'}
 >
+  {size && (
+    <svg
+      class="lottie-placeholder"
+      viewBox={`0 0 ${size.w} ${size.h}`}
+      width={size.w}
+      height={size.h}
+      style="width: 100%; height: 100%"
+      aria-hidden="true"
+    />
+  )}
 </div>
 
 <script>
@@ -37,6 +55,7 @@ const { src, class: className, label, loop = true } = Astro.props;
       path: container.dataset.lottie,
       rendererSettings: { preserveAspectRatio: 'xMidYMid meet' },
     });
+    animation.addEventListener('config_ready', () => container.querySelector('.lottie-placeholder')?.remove());
     // Handle for scripts/compare.mjs, which freezes animations on a frame.
     (container as HTMLElement & { lottie?: unknown }).lottie = animation;
   });
