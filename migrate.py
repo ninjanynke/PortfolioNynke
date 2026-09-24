@@ -115,7 +115,9 @@ class RichTextToMarkdown(HTMLParser):
         _, buffer = self._stack.pop(index)
         inner = "".join(buffer)
         core = inner.strip()
-        if not core:
+        # Emphasis on punctuation alone ('<em>. </em>') looks the same as
+        # plain text, and Markdown won't parse 'word*.*': it shows the stars.
+        if not re.search(r"\w", core):
             self._emit(inner)
             return
         lead = inner[: len(inner) - len(inner.lstrip())]
