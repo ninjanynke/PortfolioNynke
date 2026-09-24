@@ -1,7 +1,8 @@
 # nynkezwart.com — Webflow to Astro migration
 
-Context for anyone (including Claude) picking this up. Steps 1 and 3 are done:
-content is migrated and validates in Astro. No templates yet.
+Context for anyone (including Claude) picking this up. Content is migrated and
+validates in Astro; layout, home, about me and category pages are built (see
+"Build order" below). Next: the project page template.
 
 ## Goal
 
@@ -120,11 +121,23 @@ Pixel-perfect is the default; these differ on purpose (owner's decision):
   windows under 768px by the tile crossing the middle of the viewport, but
   only while the visitor is scrolling: nothing is active on page load, and
   the tile goes back to rest after 2 s without scrolling (`IDLE_MS` in
-  `src/pages/index.astro`).
+  `src/scripts/scroll-activate.ts`).
   Note: the live reference shots at 600/375 show the top logos filled,
   because the capture scrolled and triggered the live site's own effect.
 - **Home tile logos always the same size.** Live stretches the filled logo
   wider than the outline between 380–479px and 740–780px.
+- **"Other projects" cards, active state everywhere**, same idea as the
+  home tiles: tags fade in (500 ms) and the white veil clears (200 ms),
+  triggered by hover where the device can hover, and by scrolling on touch
+  screens and windows under 768px (shared `scroll-activate.ts`). Live only
+  did this from 992px up; below that it showed the type tag permanently
+  (768–991) or never showed tags or the veil (≤767), so reference shots at
+  900/600/375 differ there. The Highlights cards get their hover shadow the
+  same way.
+- **Wrapped card tags split into one pill per line**, flush right, lines
+  touching, with the touching corners squared (`src/scripts/tag-lines.ts`).
+  Live showed one big block with a ragged right edge. One-line tags are
+  unchanged.
 - © year is the current year; About me age is 30; double space in "working
   as" removed.
 
@@ -184,7 +197,13 @@ given selectors, per breakpoint: the fastest way to get exact values.
    by `Lottie.astro` (lottie-web, MIT). Identical to live with the animation
    frozen on the same frame, apart from the age, a double space fixed in
    "working  as", and the © year.
-7. Category page template, themed by the category's `colour`.
+7. ~~Category page template, themed by the category's `colour`.~~ Done:
+   `site-categories/[slug].astro`, `HighlightCard.astro`, `ProjectCard.astro`.
+   Identical to live apart from the © year and the deliberate changes above
+   (Lotties frozen on the same frame; animated GIF covers differ). Highlight
+   cards show `highlightSummary` (Webflow's separate "Highlighted text")
+   when set, else `summary`. `global.css` sets `box-sizing: border-box` on
+   everything, as Webflow does.
 8. Project page template. Frontmatter carries metadata, cover, gallery and the
    side-by-side `methodPair`; the Markdown body carries method text, the
    full-width image and the conclusion, already in the right order.

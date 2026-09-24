@@ -11,6 +11,7 @@ skills:
   - "Punch needling"
   - "Adobe Fresco"
 startDate: "2021-02-01"
+created: "2021-12-21T07:56:32Z"
 featured: false
 featuredTag: "Do It Yourself"
 cover: "./punch-needling/images/vangogh.gif"

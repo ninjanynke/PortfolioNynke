@@ -16,6 +16,7 @@ skills:
   - "Large user-group research"
 startDate: "2019-03-01"
 endDate: "2020-02-01"
+created: "2021-12-27T11:09:35Z"
 featured: false
 featuredTag: "Child robot interaction"
 cover: "./having-children-communicate-with-robot-strangers/images/setup.png"

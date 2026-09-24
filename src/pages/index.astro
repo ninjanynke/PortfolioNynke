@@ -33,52 +33,10 @@ const categories = (await getCollection('categories')).sort((a, b) => a.data.ord
 </BaseLayout>
 
 <script>
-  // Where there is no hover (touch screens) or the window is narrow, the tile
-  // crossing the middle of the screen becomes active instead: a zero-height
-  // line at 50% of the viewport, so tiles light up one row at a time.
-  // Tiles only light up while the visitor is scrolling: nothing is active on
-  // page load, and the active tile goes back to rest after IDLE_MS without
-  // scrolling. Scrolling again (either way) lights up the middle tile again.
-  const IDLE_MS = 2000;
-  const scrollMode = window.matchMedia('(hover: none), (max-width: 767px)');
-  const tiles = document.querySelectorAll('[data-tile]');
-  const inMiddle = new Set<Element>();
-  let scrolling = false;
-  let idleTimer: number | undefined;
-
-  const update = () => {
-    const on = scrollMode.matches && scrolling;
-    tiles.forEach((tile) => tile.classList.toggle('is-active', on && inMiddle.has(tile)));
-  };
-
-  const observer = new IntersectionObserver(
-    (entries) => {
-      for (const entry of entries) {
-        if (entry.isIntersecting) inMiddle.add(entry.target);
-        else inMiddle.delete(entry.target);
-      }
-      update();
-    },
-    { rootMargin: '-50% 0px -50% 0px' },
-  );
-  tiles.forEach((tile) => observer.observe(tile));
-
-  window.addEventListener(
-    'scroll',
-    () => {
-      if (!scrolling) {
-        scrolling = true;
-        update();
-      }
-      window.clearTimeout(idleTimer);
-      idleTimer = window.setTimeout(() => {
-        scrolling = false;
-        update();
-      }, IDLE_MS);
-    },
-    { passive: true },
-  );
-  scrollMode.addEventListener('change', update);
+  // Tiles light up on hover, or while scrolling on touch screens and narrow
+  // windows; see scroll-activate.ts.
+  import { scrollActivate } from '../scripts/scroll-activate';
+  scrollActivate('[data-tile]');
 </script>
 
 <style>

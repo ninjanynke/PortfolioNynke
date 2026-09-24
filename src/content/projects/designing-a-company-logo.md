@@ -13,6 +13,7 @@ skills:
   - "Adobe Illustrator"
 startDate: "2021-02-01"
 endDate: "2021-04-01"
+created: "2021-12-20T21:33:00Z"
 featured: false
 featuredTag: "Design"
 cover: "./designing-a-company-logo/images/movelab.png"

@@ -29,7 +29,12 @@ const categories = defineCollection({
       colourLight: z.string().optional(),
       logo: image().optional(),
       logoHover: image().optional(),
+      // Walking-text animation at the top of the category page (JSON path,
+      // relative to this file).
       lottie: z.string().optional(),
+      // Arrow in this category's colour, shown on neighbouring category pages
+      // when hovering the arrow that points here.
+      arrow: image().optional(),
       next: z.enum(categorySlugs).optional(),
       previous: z.enum(categorySlugs).optional(),
     }),
@@ -41,6 +46,9 @@ const projects = defineCollection({
     z.object({
       title: z.string(),
       summary: z.string(),
+      // Shorter text for the Highlights card on the category page; falls
+      // back to the summary.
+      highlightSummary: z.string().optional(),
 
       // `reference` ties this to the categories collection, so a slug that
       // doesn't exist is a build error rather than a 404 at runtime.
@@ -52,6 +60,10 @@ const projects = defineCollection({
 
       startDate: z.coerce.date().optional(),
       endDate: z.coerce.date().optional(),
+
+      // When the project was added to the portfolio; lists show the newest
+      // first. For a new project, use the day you add it.
+      created: z.coerce.date(),
 
       featured: z.boolean().default(false),
       featuredTag: z.string().optional(),

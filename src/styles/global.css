@@ -3,6 +3,11 @@
 
 @import "./tokens.css";
 
+/* Webflow sizes every element this way; widths below include borders. */
+* {
+  box-sizing: border-box;
+}
+
 html {
   height: 100%;
   -webkit-text-size-adjust: 100%;

@@ -1,0 +1,242 @@
+---
+import type { GetStaticPaths } from 'astro';
+import { getCollection, getEntry, render, type CollectionEntry } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Lottie from '../../components/Lottie.astro';
+import HighlightCard from '../../components/HighlightCard.astro';
+import ProjectCard from '../../components/ProjectCard.astro';
+import greyArrow from '../../assets/site/arrow.svg';
+
+export const getStaticPaths = (async () => {
+  const categories = await getCollection('categories');
+  return categories.map((category) => ({ params: { slug: category.id }, props: { category } }));
+}) satisfies GetStaticPaths;
+
+interface Props {
+  category: CollectionEntry<'categories'>;
+}
+
+const { category } = Astro.props;
+const { label, colour, lottie, next, previous } = category.data;
+const { Content } = await render(category);
+
+const prevCategory = previous ? await getEntry('categories', previous) : undefined;
+const nextCategory = next ? await getEntry('categories', next) : undefined;
+
+// The walking-text JSON sits next to the category's Markdown; Vite gives us
+// its public URL.
+const lottieUrls = import.meta.glob<string>('/src/content/categories/**/*.json', {
+  query: '?url',
+  import: 'default',
+  eager: true,
+});
+const lottieUrl = lottie ? lottieUrls[`/src/content/categories/${lottie.replace(/^\.\//, '')}`] : undefined;
+
+// Same selection and order as the Webflow site:
+// highlights = featured projects, newest added first;
+// other projects = the rest, latest end date first (no end date last),
+// then newest added first.
+const time = (date?: Date) => date?.getTime() ?? -Infinity;
+const projects = await getCollection('projects', (p) => p.data.category?.id === category.id && !p.data.draft);
+const highlights = projects
+  .filter((p) => p.data.featured)
+  .sort((a, b) => time(b.data.created) - time(a.data.created));
+const others = projects
+  .filter((p) => !p.data.featured)
+  .sort((a, b) => time(b.data.endDate) - time(a.data.endDate) || time(b.data.created) - time(a.data.created));
+---
+
+<BaseLayout title={`${label} projects`}>
+  <div class="container">
+    <div class="category-nav">
+      <div class="nav-side">
+        <div class="arrow-slot">
+          {prevCategory && (
+            <a href={`/site-categories/${prevCategory.id}`} class="arrow-link" aria-label={`${prevCategory.data.label} projects`}>
+              <div class="arrow" style={`background-image: url("${greyArrow.src}")`}>
+                {prevCategory.data.arrow && (
+                  <div class="arrow-colour" style={`background-image: url("${prevCategory.data.arrow.src}")`} />
+                )}
+              </div>
+            </a>
+          )}
+        </div>
+      </div>
+      {lottieUrl && <Lottie
+          src={lottieUrl}
+          loop={false}
+          class:list={['walking-text', { 'walking-text-tucked': category.id === 'design-outline' }]}
+          label={`${label} projects`}
+        />}
+      <div class="nav-side">
+        <div class="arrow-slot">
+          {nextCategory && (
+            <a href={`/site-categories/${nextCategory.id}`} class="arrow-link" aria-label={`${nextCategory.data.label} projects`}>
+              <div class="arrow arrow-right" style={`background-image: url("${greyArrow.src}")`}>
+                {nextCategory.data.arrow && (
+                  <div class="arrow-colour" style={`background-image: url("${nextCategory.data.arrow.src}")`} />
+                )}
+              </div>
+            </a>
+          )}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="container">
+    <section class="section intro">
+      <h1 class="section-heading">Highlights</h1>
+      <div class="intro-text rich-text">
+        <Content />
+      </div>
+    </section>
+
+    <ul class="highlights list-reset section">
+      {highlights.map((project) => <HighlightCard project={project} colour={colour} />)}
+    </ul>
+
+    <section class="section others">
+      <h1 class="section-heading others-heading">Other projects</h1>
+      {others.length > 0 ? (
+        <ul class="others-grid list-reset">
+          {others.map((project) => <ProjectCard project={project} colour={colour} />)}
+        </ul>
+      ) : (
+        <div class="empty">
+          <div class="empty-text">Oops, nothing to see here. Let's blame it on a lack of time ;p</div>
+        </div>
+      )}
+    </section>
+  </div>
+</BaseLayout>
+
+<script>
+  // Highlights get their shadow, and project cards their tags, on hover, or
+  // while scrolling on touch screens and narrow windows; see
+  // scroll-activate.ts.
+  import { scrollActivate } from '../../scripts/scroll-activate';
+  scrollActivate('[data-highlight]');
+  scrollActivate('[data-card]');
+</script>
+
+<style>
+  .category-nav {
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+    margin: 0 auto;
+    padding-top: 20px;
+    padding-bottom: 0;
+  }
+
+  .nav-side {
+    align-self: center;
+  }
+
+  .arrow-slot {
+    width: 40px;
+    object-fit: contain;
+  }
+
+  .arrow-link {
+    display: inline-block;
+    max-width: 100%;
+  }
+
+  /* Grey arrow; the neighbour's coloured arrow fades in on hover. */
+  .arrow,
+  .arrow-colour {
+    width: 40px;
+    height: 75px;
+    background-position: 0%;
+    background-repeat: no-repeat;
+    background-size: auto 50px;
+  }
+
+  .arrow-right {
+    transform: rotateY(180deg);
+    transform-style: preserve-3d;
+  }
+
+  .arrow-colour {
+    position: absolute;
+    opacity: 0;
+    transition: opacity 0.2s;
+  }
+
+  .arrow-colour:hover {
+    opacity: 1;
+  }
+
+  .category-nav :global(.walking-text) {
+    width: 160px;
+  }
+
+  /* On the live site only the Designer walking text (a separate Webflow
+     element) is pulled 4px closer to the content below. */
+  .category-nav :global(.walking-text-tucked) {
+    margin-bottom: -4px;
+  }
+
+  .section-heading {
+    margin-top: 0;
+    margin-bottom: 10px;
+    text-align: left;
+    font-family: var(--font-ui);
+    font-size: 15px;
+    font-weight: 700;
+    line-height: 30px;
+  }
+
+  .others-heading {
+    margin-top: 20px;
+  }
+
+  .intro-text {
+    margin-bottom: 10px;
+  }
+
+  .highlights {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto;
+    grid-auto-columns: 1fr;
+    gap: 16px;
+  }
+
+  .others-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    grid-template-rows: auto auto;
+    grid-auto-columns: 1fr;
+    gap: 16px;
+  }
+
+  .empty {
+    padding: 0 0 10px;
+    background-color: #fff;
+  }
+
+  .empty-text {
+    font-family: var(--font-body);
+  }
+
+  @media screen and (max-width: 767px) {
+    .category-nav,
+    .section {
+      margin-left: 20px;
+      margin-right: 20px;
+    }
+  }
+
+  @media screen and (max-width: 479px) {
+    .highlights {
+      grid-template-columns: 1fr;
+    }
+
+    .others-grid {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+</style>

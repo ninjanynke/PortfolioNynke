@@ -10,6 +10,7 @@ skills:
   - "Adobe After Effects"
   - "Marketing"
 startDate: "2009-12-01"
+created: "2021-12-21T07:54:46Z"
 featured: false
 featuredTag: "Do It Yourself"
 cover: "./my-youtube-journey/images/jo2_1.gif"

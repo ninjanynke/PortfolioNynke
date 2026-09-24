@@ -5,6 +5,8 @@ order: 3
 colour: "#f5c068"
 logo: "./naai-outline/images/naaien.svg"
 logoHover: "./naai-outline/images/buttonfilledin.svg"
+lottie: "./naai-outline/images/walking-text.json"
+arrow: "./naai-outline/images/arrow.svg"
 next: "flower-outline"
 previous: "design-outline"
 ---

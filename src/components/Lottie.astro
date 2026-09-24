@@ -1,5 +1,6 @@
 ---
-// A looping Lottie animation, rendered as SVG by lottie-web (MIT).
+// A Lottie animation, rendered as SVG by lottie-web (MIT). Loops by default;
+// pass loop={false} to play it once.
 // Pass the animation's URL, e.g. `import url from '../assets/x.json?url'`.
 // Size the element from the outside; the animation keeps its aspect ratio
 // and is centred inside it, like Webflow's Lottie element.
@@ -8,14 +9,16 @@ interface Props {
   src: string;
   class?: string;
   label?: string;
+  loop?: boolean;
 }
 
-const { src, class: className, label } = Astro.props;
+const { src, class: className, label, loop = true } = Astro.props;
 ---
 
 <div
   class:list={['lottie', className]}
   data-lottie={src}
+  data-loop={loop ? 'true' : 'false'}
   role={label ? 'img' : undefined}
   aria-label={label}
   aria-hidden={label ? undefined : 'true'}
@@ -29,7 +32,7 @@ const { src, class: className, label } = Astro.props;
     const animation = lottie.loadAnimation({
       container,
       renderer: 'svg',
-      loop: true,
+      loop: container.dataset.loop !== 'false',
       autoplay: true,
       path: container.dataset.lottie,
       rendererSettings: { preserveAspectRatio: 'xMidYMid meet' },

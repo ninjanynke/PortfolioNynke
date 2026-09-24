@@ -10,6 +10,7 @@ skills:
   - "Adobe Illustrator"
 startDate: "2020-08-01"
 endDate: "2020-09-01"
+created: "2021-12-20T21:36:00Z"
 featured: false
 featuredTag: "Design"
 cover: "./my-portfolio-logos/images/logo_initials_.gif"

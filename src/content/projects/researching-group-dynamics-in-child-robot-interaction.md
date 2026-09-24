@@ -14,6 +14,7 @@ skills:
   - "Large user-group research"
 startDate: "2019-04-01"
 endDate: "2019-06-01"
+created: "2021-12-20T20:09:34Z"
 featured: false
 featuredTag: "Child robot interaction"
 cover: "./researching-group-dynamics-in-child-robot-interaction/images/screenshot-2021-12-27-at-19.47.33.png"

@@ -11,6 +11,7 @@ skills:
   - "Fusion360"
   - "Clay sculpting"
 startDate: "2022-01-01"
+created: "2023-04-10T10:18:21Z"
 featured: true
 featuredTag: "Design"
 cover: "./clay-jewelry-part-2/images/websitefront2.jpg"

@@ -5,6 +5,8 @@ order: 1
 colour: "#8ad0dc"
 logo: "./program-outline/images/program.svg"
 logoHover: "./program-outline/images/programfilledin.svg"
+lottie: "./program-outline/images/walking-text.json"
+arrow: "./program-outline/images/arrow.svg"
 next: "design-outline"
 ---
 

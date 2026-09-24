@@ -12,6 +12,7 @@ skills:
   - "Client communication"
 startDate: "2022-12-20"
 endDate: "2024-03-19"
+created: "2023-12-20T15:54:48Z"
 featured: false
 featuredTag: "Do It Yourself"
 cover: "./kitchen-reno/images/p1090747.jpg"

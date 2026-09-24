@@ -15,6 +15,7 @@ skills:
   - "Usability testing"
 startDate: "2022-03-01"
 endDate: "2022-07-08"
+created: "2023-01-21T21:25:08Z"
 featured: false
 featuredTag: "UX Design"
 cover: "./nohrd-fitness-equipment-app-design/images/nohrd-icon-big.png"

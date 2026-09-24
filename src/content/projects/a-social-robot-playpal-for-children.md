@@ -18,6 +18,7 @@ skills:
   - "Electronics"
 startDate: "2019-02-01"
 endDate: "2019-05-01"
+created: "2021-12-20T20:48:06Z"
 featured: false
 featuredTag: "Child robot interaction"
 cover: "./a-social-robot-playpal-for-children/images/screenshot-2021-12-27-at-18.17.39.png"

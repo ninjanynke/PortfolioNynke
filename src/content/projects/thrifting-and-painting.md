@@ -14,6 +14,7 @@ skills:
   - "Painting"
 startDate: "2019-10-01"
 endDate: "2019-10-01"
+created: "2021-12-21T07:37:29Z"
 featured: false
 featuredTag: "Do It Yourself"
 cover: "./thrifting-and-painting/images/screenshot-2021-12-21-at-10.25.09.png"

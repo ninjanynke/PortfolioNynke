@@ -55,10 +55,12 @@ broken page.
 | ---------------------------------- | ----------------------------- |
 | Project title                      | `title`                       |
 | Project short summary              | `summary` (tags stripped)     |
+| Highlighted text                   | `highlightSummary`, only where it differs from the summary |
 | Project category                   | `category` (collection ref)   |
 | Project type / tags / skills learnt| `type`, `tags`, `skills` — resolved from slugs to labels |
 | Project start/end date             | `startDate`, `endDate` (ISO)  |
 | IsHighlightedProject               | `featured`                    |
+| Created On                         | `created` (list order)        |
 | Project cover image                | `cover`                       |
 | Project gallery images             | `gallery` + `galleryCaption`  |
 | Method image LB / RB               | `methodPair`                  |
