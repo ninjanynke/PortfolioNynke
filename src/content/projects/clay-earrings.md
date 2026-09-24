@@ -36,7 +36,7 @@ video:
 
 ![A close up of earrings that I've made and sold.](./clay-earrings/images/screenshot-2021-12-21-at-10.12.22.jpg)
 
-When I started to make earrings, it was mostly because I found the ones on Instagram too pricy. They'd have to be flown in from the USA, Hawaii or Australia which added on massive extra costs. So I gave it a try! And I wanted to give it a good try*.* Which meant polishing my **3D modelling skills**, **3D printing** the designs at home, conditioning the clay, cleaning and polishing it at the end and putting them together to create the final result.
+When I started to make earrings, it was mostly because I found the ones on Instagram too pricy. They'd have to be flown in from the USA, Hawaii or Australia which added on massive extra costs. So I gave it a try! And I wanted to give it a good try. Which meant polishing my **3D modelling skills**, **3D printing** the designs at home, conditioning the clay, cleaning and polishing it at the end and putting them together to create the final result.
 
 ## Conclusion and future plans
 
