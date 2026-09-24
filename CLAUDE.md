@@ -70,7 +70,11 @@ Webflow CDN URLs remain. See `README.md` for usage and the field mapping.
 
 - `tikkie` is a draft with no category set. Invisible on the live site. Decide:
   finish or delete.
-- The Etsy footer entry has no URL and is skipped.
+- The Etsy footer entry has no URL in the export, so `migrate.py` skips it.
+  Added by hand to `src/data/footer.json` (2026-09-24, ClubKekeJewelry shop,
+  after GitHub); a re-run of the migration would drop it again. With 8
+  icons the footer shows one row down to 768px, then 4+4 (480–767) and
+  3+3+2 on phones, always at 40px (live had 7 icons, shrinking at 600).
 - `design-outline` is the only category with a Lottie animation, and its URL
   points at a **different Webflow project** (site ID `5f36f3d3…`, not
   `5f3a5425…`). That file (`5f708f871837f3269e6b940f_render.json`) is backed

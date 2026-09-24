@@ -78,7 +78,9 @@ archive pages, generate them from the values instead.
 The script prints these at the end of a run:
 
 - `tikkie` has no category and is still a draft — it won't appear anywhere.
-- The Etsy footer entry has no URL and is skipped.
+- The Etsy footer entry has no URL in the export, so `migrate.py` skips it.
+  Added by hand to `src/data/footer.json` (2026-09-24, ClubKekeJewelry shop,
+  after GitHub); a re-run of the migration would drop it again.
 - `design-outline` is the only category with a Lottie animation attached, and
   it points at a *different* Webflow project (site ID `5f36f3d3…`, not
   `5f3a5425…`). The other three categories have no Lottie set. Your assets zip
