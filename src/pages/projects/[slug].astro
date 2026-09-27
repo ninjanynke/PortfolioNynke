@@ -328,7 +328,9 @@ const formatDate = (date: Date) =>
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
     grid-auto-columns: 1fr;
-    gap: 15px 20px;
+    /* Tighter than elsewhere, and equal both ways, so the images read as
+       one set; the caption sits the same 10px below. */
+    gap: 10px;
   }
 
   .gallery :global(.gallery-link) {
@@ -355,8 +357,9 @@ const formatDate = (date: Date) =>
     object-fit: cover;
   }
 
+  /* Same distance from the images as captions in Method. */
   .gallery-caption {
-    margin-top: 15px;
+    margin-top: 10px;
     color: var(--dark-grey);
     font-family: var(--font-ui);
     font-size: 12px;
