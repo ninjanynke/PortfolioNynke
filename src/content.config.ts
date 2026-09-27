@@ -24,6 +24,8 @@ const categories = defineCollection({
     z.object({
       title: z.string(),
       label: z.string(),
+      // Shown above a project page, e.g. "Design projects".
+      pageTitle: z.string(),
       order: z.number(),
       colour: z.string(),
       colourLight: z.string().optional(),
@@ -83,7 +85,13 @@ const projects = defineCollection({
         .default([]),
 
       video: z
-        .object({ youtube: z.string(), caption: z.string().optional() })
+        .object({
+          youtube: z.string(),
+          caption: z.string().optional(),
+          // Shape of the player, "width:height". Default 16:9; a few
+          // videos were shown 4:3 on the Webflow site.
+          aspect: z.string().regex(/^\d+:\d+$/).optional(),
+        })
         .optional(),
     }),
 });

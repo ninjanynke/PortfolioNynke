@@ -1,0 +1,409 @@
+---
+import type { GetStaticPaths } from 'astro';
+import { getCollection, getEntry, render, type CollectionEntry } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ProjectBody from '../../components/ProjectBody.astro';
+import ProjectImage from '../../components/ProjectImage.astro';
+import Lightbox from '../../components/Lightbox.astro';
+import arrow from '../../assets/site/arrow.svg';
+import arrowHover from '../../assets/site/arrow-dark.svg';
+
+export const getStaticPaths = (async () => {
+  const projects = await getCollection('projects', (p) => !p.data.draft);
+  return projects.map((project) => ({ params: { slug: project.id }, props: { project } }));
+}) satisfies GetStaticPaths;
+
+interface Props {
+  project: CollectionEntry<'projects'>;
+}
+
+const { project } = Astro.props;
+const { title, summary, type, tags, skills, startDate, endDate, gallery, galleryCaption } = project.data;
+const category = project.data.category ? await getEntry(project.data.category) : undefined;
+const colour = category?.data.colour ?? 'var(--dark-grey)';
+const { Content } = await render(project);
+
+// "Mar 1, 2022", as Webflow printed dates. Dates are stored as UTC midnight.
+const formatDate = (date: Date) =>
+  date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric', timeZone: 'UTC' });
+---
+
+<BaseLayout title={title} description={summary} bodyClass="project-page">
+  <div class="container back-bar">
+    <div class="back">
+      {category && (
+        <a href={`/site-categories/${category.id}`} class="back-link" aria-label={`Back to ${category.data.pageTitle.toLowerCase()}`}>
+          <div class="back-arrow-hover" style={`background-image: url("${arrowHover.src}")`}></div>
+          <div class="back-arrow" style={`background-image: url("${arrow.src}")`}></div>
+        </a>
+      )}
+    </div>
+    {category && <div class="category-name" style={`color: ${colour}`}>{category.data.pageTitle}</div>}
+  </div>
+
+  <article class="container project">
+    <h1 class="title">{title}</h1>
+
+    <div class="intro">
+      <div class="facts-column">
+        <div class="facts">
+          {/* Empty space above the facts, so they line up with the text next
+              to them (Webflow's invisible "Short but sweet" heading). */}
+          <div class="facts-spacer" aria-hidden="true"><span class="label spacer-label">Short but sweet</span></div>
+          <dl class="list-reset">
+            {startDate && (
+              <div class="fact">
+                <dt class="fact-name">Duration</dt>
+                <dd class="fact-value"><span class="fact-text">{formatDate(startDate)}</span><span class="dash">-</span>{endDate ? <span class="fact-text">{formatDate(endDate)}</span> : <span class="dash">now</span>}</dd>
+              </div>
+            )}
+            {type && (
+              <div class="fact">
+                <dt class="fact-name">Type of project</dt>
+                <dd class="fact-value"><span class="fact-text">{type}</span></dd>
+              </div>
+            )}
+            {tags.length > 0 && (
+              <div class="fact">
+                <dt class="fact-name">Tags</dt>
+                <dd class="fact-value fact-pills"><ul class="tags list-reset">{tags.map((tag) => <li class="tag">{tag}</li>)}</ul></dd>
+              </div>
+            )}
+            {skills.length > 0 && (
+              <div class="fact">
+                <dt class="fact-name">Learnt skills</dt>
+                <dd class="fact-value fact-pills"><ul class="skills list-reset">{skills.map((skill) => <li class="skill"><span class="skill-pill">{skill}</span></li>)}</ul></dd>
+              </div>
+            )}
+          </dl>
+        </div>
+      </div>
+      <div class="key-work">
+        <div><h2 class="label" style={`border-color: ${colour}`}>Key work</h2></div>
+        <div class="key-work-text rich-text"><p>{summary}</p></div>
+      </div>
+    </div>
+
+    {gallery.length > 0 && (
+      <section class="gallery-section">
+        <h2 class="label" style={`border-color: ${colour}`}>Project images</h2>
+        <ul class="gallery list-reset">
+          {gallery.map((image) => (
+            <li>
+              <ProjectImage
+                src={image}
+                group="gallery"
+                sizes="(max-width: 479px) 46vw, (max-width: 767px) 48vw, (max-width: 991px) 230px, 300px"
+                class="gallery-link"
+                imgClass="gallery-image"
+              />
+            </li>
+          ))}
+        </ul>
+        {galleryCaption && <div class="gallery-caption">{galleryCaption}</div>}
+      </section>
+    )}
+
+    <ProjectBody project={project} colour={colour}><Content /></ProjectBody>
+  </article>
+
+  <Lightbox />
+</BaseLayout>
+
+<style>
+  /* Webflow puts a 20px margin on the body of project pages on phones, so
+     the page (header and footer too) sits 20px in from the edges. */
+  @media screen and (max-width: 767px) {
+    :global(body.project-page) {
+      margin-left: 20px;
+      margin-right: 20px;
+    }
+  }
+
+  /* Back arrow | "maker projects" | empty. */
+  .back-bar {
+    display: grid;
+    grid-template-columns: 1fr 2.75fr 1fr;
+    grid-template-rows: auto;
+    grid-auto-columns: 1fr;
+    gap: 16px;
+    justify-content: flex-start;
+    align-items: center;
+    margin-top: 20px;
+    margin-bottom: 10px;
+  }
+
+  .back {
+    grid-area: 1 / 1 / 2 / 2;
+  }
+
+  .back-link {
+    display: inline-block;
+    max-width: 100%;
+  }
+
+  /* Grey arrow; a darker one fades in on hover (200 ms). */
+  .back-arrow,
+  .back-arrow-hover {
+    width: 40px;
+    height: 40px;
+    background-position: 0;
+    background-repeat: no-repeat;
+    background-size: auto 40px;
+  }
+
+  .back-arrow-hover {
+    position: absolute;
+    opacity: 0;
+    transition: opacity 0.2s;
+  }
+
+  .back-arrow-hover:hover {
+    opacity: 1;
+  }
+
+  .category-name {
+    text-align: center;
+    letter-spacing: 1px;
+    text-transform: lowercase;
+    font-family: var(--font-ui);
+    font-size: 15px;
+    font-weight: 600;
+  }
+
+  /* Sections are spaced by this gap alone, from the last thing in one
+     section to the next heading (and to the footer), whatever the
+     section ends with. So every block that can end a section drops its
+     bottom margin there. A deliberate change: on Webflow the space varied
+     from 0 to 41px depending on the last block. */
+  .project {
+    --section-gap: 30px;
+    padding-top: 10px;
+    padding-bottom: var(--section-gap);
+    border-top: 1px solid var(--box-shadow);
+  }
+
+  .title {
+    margin-top: 0;
+    margin-bottom: 10px;
+    text-align: left;
+    font-family: var(--font-ui);
+    font-size: 15px;
+    font-weight: 700;
+    line-height: 30px;
+  }
+
+  /* Section heading with a line in the category colour. */
+  .label {
+    display: inline-block;
+    margin: 0 0 10px;
+    border: 0 solid #000;
+    border-bottom-width: 1px;
+    font-family: var(--font-ui);
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 20px;
+  }
+
+  /* Facts on the left, key work on the right. */
+  .intro {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+  }
+
+  .project > :global(section) {
+    margin-top: var(--section-gap);
+  }
+
+  .facts-column {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+  }
+
+  .key-work {
+    flex: 1;
+  }
+
+  .key-work-text {
+    font-family: var(--font-body);
+  }
+
+  .key-work-text p:last-child {
+    margin-bottom: 0;
+  }
+
+  .facts-spacer {
+    opacity: 0;
+  }
+
+  /* Name and value side by side in two halves. */
+  .fact {
+    display: flex;
+    margin: 0 -10px 5px;
+  }
+
+  .fact:last-child {
+    margin-bottom: 0;
+  }
+
+  /* The pills' own bottom margin, cancelled on the last row of facts. */
+  .fact:last-child .tags,
+  .fact:last-child .skills {
+    margin-bottom: -5px;
+  }
+
+  .fact-name,
+  .fact-value {
+    width: 50%;
+    min-height: 1px;
+    margin: 0;
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+
+  .fact-name {
+    color: var(--dim-grey);
+    font-family: var(--font-ui);
+    font-size: 12px;
+    font-weight: 700;
+  }
+
+  .fact-text {
+    display: inline-block;
+    margin-right: 10px;
+    text-transform: capitalize;
+    font-family: var(--font-body);
+  }
+
+  .dash {
+    display: inline-block;
+    margin-right: 10px;
+    font-family: var(--font-body);
+  }
+
+  .tags {
+    display: flex;
+    flex-wrap: wrap;
+    justify-items: start;
+    margin-right: 10px;
+    text-transform: lowercase;
+    font-family: var(--font-ui);
+  }
+
+  .tag {
+    margin-bottom: 5px;
+    margin-right: 10px;
+    padding-left: 10px;
+    padding-right: 10px;
+    border-radius: 5px;
+    background-color: var(--box-shadow);
+    font-weight: 500;
+  }
+
+  .skills {
+    margin-right: 10px;
+  }
+
+  .skill {
+    display: inline-block;
+  }
+
+  .skill-pill {
+    display: block;
+    margin-bottom: 5px;
+    margin-right: 10px;
+    padding-left: 10px;
+    padding-right: 10px;
+    border-radius: 5px;
+    background-color: var(--box-shadow);
+    text-transform: lowercase;
+    font-family: var(--font-ui);
+    font-weight: 500;
+  }
+
+  /* Gallery: three across (two on phones), 5:3 tiles. */
+  .gallery {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-rows: auto auto;
+    grid-auto-columns: 1fr;
+    gap: 15px 20px;
+  }
+
+  .gallery :global(.gallery-link) {
+    position: relative;
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    padding-bottom: 60%;
+    overflow: hidden;
+    border: 1px solid var(--dark-grey);
+    border-radius: 10px;
+    transition: box-shadow 0.2s;
+  }
+
+  .gallery :global(.gallery-link:hover) {
+    box-shadow: 3px 3px 10px 1px var(--box-shadow);
+  }
+
+  .gallery :global(.gallery-image) {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .gallery-caption {
+    margin-top: 15px;
+    color: var(--dark-grey);
+    font-family: var(--font-ui);
+    font-size: 12px;
+    font-weight: 500;
+  }
+
+  @media screen and (max-width: 991px) {
+    .facts {
+      margin-right: 20px;
+    }
+  }
+
+  @media screen and (max-width: 767px) {
+    .fact {
+      display: block;
+      margin-left: 0;
+      margin-right: 0;
+    }
+
+    .fact-name,
+    .fact-value {
+      width: 100%;
+      padding-left: 0;
+    }
+
+    .gallery {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  @media screen and (max-width: 479px) {
+    .intro {
+      flex-direction: column;
+    }
+
+    .facts-column {
+      margin-bottom: var(--section-gap);
+    }
+
+    .facts-spacer {
+      height: 0;
+      margin-top: 0;
+    }
+
+    .spacer-label {
+      margin-bottom: 0;
+    }
+  }
+</style>

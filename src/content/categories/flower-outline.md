@@ -1,6 +1,7 @@
 ---
 title: "FLORIST"
 label: "Florist"
+pageTitle: "Floral projects"
 order: 4
 colour: "#a3c485"
 logo: "./flower-outline/images/flower.svg"

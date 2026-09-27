@@ -155,6 +155,11 @@ Pixel-perfect is the default; these differ on purpose (owner's decision):
 - **Category pages all line up.** Live pulls only Designer's walking text
   4px up (a Webflow quirk), so "Highlights" sat 4px higher there. Now all
   four pages use the same position, so switching categories doesn't jump.
+- **Project pages: equal space between sections.** Live stacked each
+  block's bottom margin, so the space above a section heading (or the
+  footer) ran from 0 to 41px depending on what ended the section. Now
+  sections end flush and sit `--section-gap` (30px) apart, at every width;
+  spacing inside sections is unchanged.
 - © year is the current year; About me age is 30; double space in "working
   as" removed.
 

@@ -1,0 +1,311 @@
+---
+// The lower half of a project page: Method, Video, Conclusion.
+//
+// The Markdown body (passed in as the slot) holds, in reading order:
+//   ## Method
+//   method text 1          (sits with the image pair above it)
+//   ![caption](image)      (the full-width image, optional)
+//   method text 2
+//   ## Conclusion and future plans
+//   conclusion
+// The Video section sits between Method and Conclusion but comes from the
+// frontmatter, so the rendered body is split at its headings and at the
+// image, and the pieces are placed here.
+// Without a full-width image, method text counts as text 1 when there is an
+// image pair (it goes beside or under the pair) and as text 2 otherwise
+// (full width), which is how every project on the Webflow site is laid out.
+import type { CollectionEntry } from 'astro:content';
+import ProjectImage from './ProjectImage.astro';
+
+interface Props {
+  project: CollectionEntry<'projects'>;
+  colour: string;
+}
+
+const { project, colour } = Astro.props;
+const { methodPair, video } = project.data;
+
+const html = await Astro.slots.render('default');
+
+// Split into sections at the h2 headings: { method: '…', 'conclusion-…': '…' }.
+const sections: Record<string, string> = {};
+const headings = [...html.matchAll(/<h2[^>]*id="([^"]*)"[^>]*>.*?<\/h2>/g)];
+headings.forEach((heading, i) => {
+  const start = heading.index + heading[0].length;
+  const end = headings[i + 1]?.index ?? html.length;
+  sections[heading[1]] = html.slice(start, end).trim();
+});
+const methodHtml = sections['method'] ?? '';
+const conclusionHtml = sections['conclusion-and-future-plans'] ?? '';
+
+// The full-width image: a paragraph holding nothing but an image. The
+// rendered <img> is dropped; the image is drawn again from the original
+// file (see ProjectImage.astro), and its alt text is the caption.
+const imagePara = methodHtml.match(/<p>\s*<img[^>]*alt="([^"]*)"[^>]*>\s*<\/p>/);
+let text1 = '';
+let text2 = '';
+if (imagePara) {
+  text1 = methodHtml.slice(0, imagePara.index).trim();
+  text2 = methodHtml.slice(imagePara.index! + imagePara[0].length).trim();
+} else if (methodPair.length > 0) {
+  text1 = methodHtml;
+} else {
+  text2 = methodHtml;
+}
+
+const images = import.meta.glob<ImageMetadata>('/src/content/projects/*/images/*', { eager: true, import: 'default' });
+const fullPath = project.body?.match(/!\[[^\]]*\]\(\.\/([^)\s]+)\)/)?.[1];
+const fullWidth = fullPath ? images[`/src/content/projects/${fullPath}`] : undefined;
+const fullCaption = imagePara?.[1] ?? '';
+
+// Webflow shows the pair right-hand image (RB) first, then LB. A lone
+// image is always LB, and method text 1 goes beside it; with two images,
+// the text goes underneath.
+const pair = [...methodPair].reverse();
+const hasMethod = pair.length > 0 || text1 || fullWidth || text2;
+
+// Player height as a share of its width: 480/854 for 16:9, as Webflow had.
+const [aspectW, aspectH] = (video?.aspect ?? '854:480').split(':').map(Number);
+const playerHeight = `${(100 * aspectH) / aspectW}%`;
+// The video text is plain text; a blank line starts a new paragraph.
+const videoText = video?.caption?.split(/\n\s*\n/) ?? [];
+---
+
+{hasMethod && (
+  <section class="method">
+    <h2 class="label" style={`border-color: ${colour}`}>Method</h2>
+    {(pair.length > 0 || text1) && (
+      <div class="method-grid">
+        {pair.map((image) => (
+          <div>
+            <ProjectImage
+              src={image.src}
+              alt={image.caption}
+              sizes="(max-width: 479px) 92vw, (max-width: 767px) 50vw, (max-width: 991px) 354px, 460px"
+              class="pair-link"
+              imgClass="pair-image"
+              style={`width: min(100%, ${image.src.width}px)`}
+            >
+              {image.caption && <div class="caption pair-caption">{image.caption}</div>}
+            </ProjectImage>
+          </div>
+        ))}
+        {text1 && <div class:list={['rich-text', { 'text-under': pair.length === 2 }]} set:html={text1} />}
+      </div>
+    )}
+    {(fullWidth || text2) && (
+      <div class="full-grid">
+        {fullWidth && (
+          <ProjectImage
+            src={fullWidth}
+            alt={fullCaption}
+            sizes="(max-width: 479px) 92vw, (max-width: 767px) 66vw, (max-width: 991px) 510px, 658px"
+            class="full-link"
+            imgClass="full-image"
+          >
+            {fullCaption && <div class="caption full-caption" set:html={fullCaption} />}
+          </ProjectImage>
+        )}
+        {text2 && <div class="rich-text text-2" set:html={text2} />}
+      </div>
+    )}
+  </section>
+)}
+
+{video && (
+  <section class="video">
+    <h2 class="label" style={`border-color: ${colour}`}>Video</h2>
+    <div class:list={['video-grid', { 'no-text': videoText.length === 0 }]}>
+      {videoText.length > 0 && <div class="video-text rich-text">{videoText.map((paragraph) => <p>{paragraph}</p>)}</div>}
+      <div class="video-frame" style={`padding-top: ${playerHeight}`}>
+        <iframe
+          src={`https://www.youtube-nocookie.com/embed/${video.youtube}`}
+          title="YouTube video"
+          loading="lazy"
+          allow="autoplay; fullscreen; picture-in-picture"
+          allowfullscreen
+        ></iframe>
+      </div>
+    </div>
+  </section>
+)}
+
+{conclusionHtml && (
+  <section class="conclusion">
+    <h2 class="label" style={`border-color: ${colour}`}>Conclusion and future plans</h2>
+    <div class="rich-text" set:html={conclusionHtml} />
+  </section>
+)}
+
+<style>
+  /* Section heading with a line in the category colour. */
+  .label {
+    display: inline-block;
+    margin: 0 0 10px;
+    border: 0 solid #000;
+    border-bottom-width: 1px;
+    font-family: var(--font-ui);
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 20px;
+  }
+
+  .caption {
+    display: flex;
+    justify-content: flex-start;
+    align-self: stretch;
+    margin-top: 10px;
+    color: var(--dark-grey);
+    text-align: left;
+    font-family: var(--font-ui);
+    font-size: 12px;
+    font-weight: 500;
+  }
+
+  /* Method: the image pair side by side, text 1 beside a lone image or
+     under a pair. */
+  .method-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-auto-columns: 1fr;
+    gap: 10px 20px;
+  }
+
+  .text-under {
+    grid-column: 1 / -1;
+  }
+
+  .method-grid :global(.pair-link) {
+    display: inline-block;
+    max-width: 100%;
+  }
+
+  /* Sized by the content box (plus the 1px border), so --ratio gives the
+     same height as the original image would. */
+  .method-grid :global(.pair-image) {
+    box-sizing: content-box;
+    width: calc(100% - 2px);
+    height: auto;
+    aspect-ratio: var(--ratio);
+    border: 1px solid var(--dark-grey);
+    border-radius: 10px;
+  }
+
+  /* The full-width image (70% wide, centred) and text 2. */
+  .full-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-auto-columns: 1fr;
+    gap: 10px 20px;
+  }
+
+  .full-grid :global(.full-link) {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    max-width: 100%;
+    margin-top: 10px;
+  }
+
+  .full-grid :global(.full-image) {
+    box-sizing: content-box;
+    width: calc(70% - 2px);
+    height: auto;
+    aspect-ratio: var(--ratio);
+    border: 1px solid var(--dark-grey);
+    border-radius: 5px;
+  }
+
+  .full-caption {
+    display: block;
+    width: 70%;
+    margin-left: 15%;
+  }
+
+  /* Sections end flush with their last line of text, image or caption;
+     the page spaces them apart (--section-gap in the page styles). */
+  .method-grid:last-child :global(p:last-child),
+  .text-2 :global(p:last-child),
+  .video-text p:last-child,
+  .conclusion :global(p:last-child) {
+    margin-bottom: 0;
+  }
+
+  /* Video: player left, text right. */
+  .video-grid {
+    display: grid;
+    grid-template-areas: "player text";
+    grid-template-columns: 1fr 1fr;
+    grid-auto-columns: 1fr;
+    gap: 20px;
+  }
+
+  .video-text {
+    grid-area: text;
+  }
+
+  .video-frame {
+    position: relative;
+    grid-area: player;
+    width: 100%;
+  }
+
+  .video-frame iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: none;
+  }
+
+  @media screen and (max-width: 991px) {
+    .caption {
+      align-self: center;
+      text-align: center;
+    }
+
+    .full-caption {
+      margin-left: 0;
+      text-align: left;
+    }
+  }
+
+  @media screen and (max-width: 767px) {
+    .pair-caption {
+      justify-content: flex-start;
+      text-align: left;
+    }
+
+    .video-grid {
+      grid-template-areas: "player" "text";
+      grid-template-columns: 1fr;
+    }
+
+    .video-grid.no-text {
+      grid-template-areas: "player";
+    }
+  }
+
+  @media screen and (max-width: 479px) {
+    .method-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .text-under {
+      margin-bottom: 10px;
+    }
+
+    .method-grid:last-child .text-under {
+      margin-bottom: 0;
+    }
+
+    .full-grid :global(.full-image) {
+      width: calc(100% - 2px);
+    }
+
+    .full-caption {
+      width: 100%;
+    }
+  }
+</style>

@@ -1,0 +1,277 @@
+---
+// Click an image to see it large, like Webflow's lightbox. Put this on the
+// page once; any link with `data-lightbox` opens its `href` (the large
+// image) here instead of navigating. Links sharing a `data-lightbox` value
+// form a group: arrows, a thumbnail strip, keyboard arrows. Without
+// JavaScript the links still open the image itself.
+// Look and sizes follow Webflow's .w-lightbox styles.
+---
+
+<dialog class="lightbox" aria-label="Image viewer" tabindex="-1">
+  <div class="lb-view">
+    <img class="lb-image" alt="" />
+  </div>
+  <div class="lb-strip" hidden></div>
+  <button type="button" class="lb-control lb-left" aria-label="Previous image" hidden></button>
+  <button type="button" class="lb-control lb-right" aria-label="Next image" hidden></button>
+  <button type="button" class="lb-control lb-close" aria-label="Close"></button>
+</dialog>
+
+<script>
+  const dialog = document.querySelector<HTMLDialogElement>('dialog.lightbox')!;
+  const view = dialog.querySelector<HTMLElement>('.lb-view')!;
+  const image = dialog.querySelector<HTMLImageElement>('.lb-image')!;
+  const strip = dialog.querySelector<HTMLElement>('.lb-strip')!;
+  const left = dialog.querySelector<HTMLButtonElement>('.lb-left')!;
+  const right = dialog.querySelector<HTMLButtonElement>('.lb-right')!;
+  const close = dialog.querySelector<HTMLButtonElement>('.lb-close')!;
+
+  let items: HTMLAnchorElement[] = [];
+  let index = 0;
+
+  function show(i: number) {
+    index = i;
+    const link = items[i];
+    image.src = link.href;
+    image.alt = link.querySelector('img')?.alt ?? '';
+    left.hidden = right.hidden = items.length < 2;
+    left.classList.toggle('is-inactive', i === 0);
+    right.classList.toggle('is-inactive', i === items.length - 1);
+    strip.querySelectorAll('.lb-thumb').forEach((thumb, t) => thumb.classList.toggle('is-active', t === i));
+    strip.querySelectorAll('.lb-thumb')[i]?.scrollIntoView({ block: 'nearest', inline: 'nearest' });
+  }
+
+  function open(link: HTMLAnchorElement) {
+    const group = link.dataset.lightbox;
+    items = group
+      ? [...document.querySelectorAll<HTMLAnchorElement>(`a[data-lightbox="${group}"]`)]
+      : [link];
+    const grouped = items.length > 1;
+    dialog.classList.toggle('is-group', grouped);
+    strip.hidden = !grouped;
+    strip.replaceChildren(
+      ...(grouped
+        ? items.map((item, i) => {
+            const thumb = document.createElement('button');
+            thumb.type = 'button';
+            thumb.className = 'lb-thumb';
+            thumb.setAttribute('aria-label', `Image ${i + 1}`);
+            const src = item.querySelector('img')?.currentSrc || item.href;
+            thumb.style.backgroundImage = `url("${src}")`;
+            thumb.addEventListener('click', () => show(i));
+            return thumb;
+          })
+        : []),
+    );
+    show(items.indexOf(link));
+    dialog.showModal();
+    // Focus the dialog itself rather than its first control, which would
+    // otherwise show a focus ring on opening.
+    dialog.focus();
+  }
+
+  const step = (by: number) => {
+    const next = index + by;
+    if (next >= 0 && next < items.length) show(next);
+  };
+
+  document.querySelectorAll<HTMLAnchorElement>('a[data-lightbox]').forEach((link) => {
+    link.addEventListener('click', (event) => {
+      event.preventDefault();
+      open(link);
+    });
+  });
+
+  left.addEventListener('click', () => step(-1));
+  right.addEventListener('click', () => step(1));
+  close.addEventListener('click', () => dialog.close());
+  // In a group, clicking the image goes to the next one; anywhere else
+  // outside the controls closes.
+  view.addEventListener('click', (event) => {
+    if (event.target === image && items.length > 1) step(index === items.length - 1 ? -index : 1);
+    else dialog.close();
+  });
+  dialog.addEventListener('keydown', (event) => {
+    if (event.key === 'ArrowLeft') step(-1);
+    if (event.key === 'ArrowRight') step(1);
+  });
+  dialog.addEventListener('close', () => image.removeAttribute('src'));
+</script>
+
+<style>
+  .lightbox {
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    max-width: none;
+    height: 100%;
+    max-height: none;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    background: rgba(0, 0, 0, 0.9);
+    color: #fff;
+    text-align: center;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+    opacity: 0;
+    transition: opacity 0.3s, display 0.3s allow-discrete, overlay 0.3s allow-discrete;
+  }
+
+  .lightbox[open] {
+    opacity: 1;
+  }
+
+  @starting-style {
+    .lightbox[open] {
+      opacity: 0;
+    }
+  }
+
+  .lightbox::backdrop {
+    background: transparent;
+  }
+
+  .lightbox:focus {
+    outline: 0;
+  }
+
+  .lb-view {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+  }
+
+  .lb-image {
+    display: block;
+    max-width: 100vw;
+    max-height: 100vh;
+  }
+
+  .is-group .lb-view {
+    height: 86vh;
+  }
+
+  .is-group .lb-image {
+    max-height: 86vh;
+    cursor: pointer;
+  }
+
+  .lb-control {
+    position: absolute;
+    top: 0;
+    width: 4em;
+    padding: 0;
+    border: 0;
+    background-color: transparent;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: 24px;
+    font-size: 17px;
+    cursor: pointer;
+    transition: all 0.3s;
+  }
+
+  .lb-control[hidden] {
+    display: none;
+  }
+
+  .lb-left,
+  .lb-right {
+    bottom: 0;
+    display: none;
+  }
+
+  .lb-left {
+    left: 0;
+    background-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9Ii0yMCAwIDI0IDQwIiB3aWR0aD0iMjQiIGhlaWdodD0iNDAiPjxnIHRyYW5zZm9ybT0icm90YXRlKDQ1KSI+PHBhdGggZD0ibTAgMGg1djIzaDIzdjVoLTI4eiIgb3BhY2l0eT0iLjQiLz48cGF0aCBkPSJtMSAxaDN2MjNoMjN2M2gtMjZ6IiBmaWxsPSIjZmZmIi8+PC9nPjwvc3ZnPg==");
+  }
+
+  .lb-right {
+    right: 0;
+    background-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9Ii00IDAgMjQgNDAiIHdpZHRoPSIyNCIgaGVpZ2h0PSI0MCI+PGcgdHJhbnNmb3JtPSJyb3RhdGUoNDUpIj48cGF0aCBkPSJtMC0waDI4djI4aC01di0yM2gtMjN6IiBvcGFjaXR5PSIuNCIvPjxwYXRoIGQ9Im0xIDFoMjZ2MjZoLTN2LTIzaC0yM3oiIGZpbGw9IiNmZmYiLz48L2c+PC9zdmc+");
+  }
+
+  .lb-close {
+    right: 0;
+    height: 2.6em;
+    background-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9Ii00IDAgMTggMTciIHdpZHRoPSIxOCIgaGVpZ2h0PSIxNyI+PGcgdHJhbnNmb3JtPSJyb3RhdGUoNDUpIj48cGF0aCBkPSJtMCAwaDd2LTdoNXY3aDd2NWgtN3Y3aC01di03aC03eiIgb3BhY2l0eT0iLjQiLz48cGF0aCBkPSJtMSAxaDd2LTdoM3Y3aDd2M2gtN3Y3aC0zdi03aC03eiIgZmlsbD0iI2ZmZiIvPjwvZz48L3N2Zz4=");
+    background-size: 18px;
+  }
+
+  .lb-control.is-inactive,
+  .lb-control.is-inactive:hover {
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .lb-strip {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    padding: 0 1vh;
+    overflow-x: auto;
+    overflow-y: hidden;
+    white-space: nowrap;
+    line-height: 0;
+  }
+
+  .lb-strip[hidden] {
+    display: none;
+  }
+
+  .lb-strip :global(.lb-thumb) {
+    display: inline-block;
+    box-sizing: content-box;
+    width: 10vh;
+    height: 10vh;
+    margin: 2vh 1vh;
+    padding: 0;
+    border: 0;
+    background-color: #222;
+    background-position: center;
+    background-size: cover;
+    cursor: pointer;
+  }
+
+  .lb-strip :global(.lb-thumb.is-active) {
+    opacity: 0.3;
+  }
+
+  @media (min-width: 768px) {
+    .lb-view {
+      height: 96vh;
+      margin-top: 2vh;
+    }
+
+    .lb-image {
+      max-width: 96vw;
+      max-height: 96vh;
+    }
+
+    .is-group .lb-view {
+      height: 84vh;
+    }
+
+    .is-group .lb-image {
+      max-width: 82.3vw;
+      max-height: 84vh;
+    }
+
+    .lb-left,
+    .lb-right {
+      display: block;
+      opacity: 0.5;
+    }
+
+    .lb-close {
+      opacity: 0.8;
+    }
+
+    .lb-control:hover {
+      opacity: 1;
+    }
+  }
+</style>

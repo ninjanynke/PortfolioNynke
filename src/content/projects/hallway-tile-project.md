@@ -22,5 +22,6 @@ methodPair:
     caption: "Some of the in-between shots during the project."
 video:
   youtube: "wEPUyUg320A"
+  aspect: "4:3"
   caption: "For this project, I used porcelain paint on ceramic tiles. The best way of applying the paint took some time to get used to, but was manageable in the end. All tiles were baked in the oven at a low temperature. Last but not least, I sawed and painted white a piece of MDF, to use as the ''glue'' base for the tiles. After those were glued on, I grouted the tiles with white grout. It was my first time grouting, so I was a bit nervous. But all turnt out well!"
 ---

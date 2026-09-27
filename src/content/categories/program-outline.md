@@ -1,6 +1,7 @@
 ---
 title: "PROGRAMMER"
 label: "Programmer"
+pageTitle: "Coding projects"
 order: 1
 colour: "#8ad0dc"
 logo: "./program-outline/images/program.svg"

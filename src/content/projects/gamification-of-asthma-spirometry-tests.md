@@ -37,5 +37,3 @@ Lastly, I drew out the 20 favourite ideas and we held new sessions with the chil
 When I left the project, 10 final metaphors were implemented and by now, they have been **tested at the hospital**.
 
 Last but not least, I'm a co-author of one of several papers that have been written about the project, which was **published in CHI PLAY 2020!** Click [here](https://research.utwente.nl/en/publications/spiroplay-a-suite-of-breathing-games-for-spirometry-by-kids-amp-e) to read it.
-
-‍

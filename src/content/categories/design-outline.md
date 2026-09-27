@@ -1,6 +1,7 @@
 ---
 title: "DESIGNER"
 label: "Designer"
+pageTitle: "Design projects"
 order: 2
 colour: "#f3888c"
 colourLight: "hsla(357.77777777777777, 81.82%, 74.12%, 0.74)"

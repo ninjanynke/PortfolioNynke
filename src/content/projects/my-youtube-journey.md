@@ -22,7 +22,7 @@ methodPair:
     caption: "A GIF from an Emma Watson video I created."
 video:
   youtube: "gpLIad9DWc4"
-  caption: "This is a fan video I made of Little Women, one of my favourite books and movies. Besides series and pictures, I experimented a bit with fully drawn animation videos. I participated with these videos in the yearly movie-gala that my high school hosted and won twice! The third time they didn't want to give me the prize anymore, but they did ask me to host the gala together with a friend ;p I also have created some paid-for promotional videos for companies while I was still in high school. When I went to university the hobby kind of slipped, but during the corona pandemic I have been getting back into creating again, which felt amazing. I have started learning more about Adobe After Effects instead of the good old Sony Vegas Pro, which I plan to continue to do. ‍"
+  caption: "This is a fan video I made of Little Women, one of my favourite books and movies.\n\nBesides series and pictures, I experimented a bit with fully drawn animation videos. I participated with these videos in the yearly movie-gala that my high school hosted and won twice! The third time they didn't want to give me the prize anymore, but they did ask me to host the gala together with a friend ;p I also have created some paid-for promotional videos for companies while I was still in high school.\n\nWhen I went to university the hobby kind of slipped, but during the corona pandemic I have been getting back into creating again, which felt amazing. I have started learning more about Adobe After Effects instead of the good old Sony Vegas Pro, which I plan to continue to do."
 ---
 
 ## Method

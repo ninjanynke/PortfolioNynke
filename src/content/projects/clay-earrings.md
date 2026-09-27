@@ -29,6 +29,7 @@ gallery:
 galleryCaption: "These gallery pictures include some pictures of the process in making earrings. Next to that are a handful of designs I created over the years."
 video:
   youtube: "-F10UX54-pk"
+  aspect: "4:3"
   caption: "In 2021, I created a mini summer collection of earrings. The five ready-made pairs of earrings were sold through Instagram within 24 hours, even leading to some additional orders that were made afterwards. The promo video was created with After Effects, shot and edited by me. I wanted to work on my After Effects skills and this project was a good motivator to do so."
 ---
 

@@ -21,7 +21,9 @@ const year = new Date().getFullYear();
             return (
               <li class="footer-icon">
                 <a href={link.url} target="_blank" rel="noopener" class="footer-icon-link" aria-label={link.name}>
-                  {icon && <img src={icon.src} width="40" alt="" loading="lazy" class="footer-icon-img" />}
+                  {/* The height keeps the icon's space while it lazy-loads,
+                      so the footer doesn't change height on long pages. */}
+                  {icon && <img src={icon.src} width="40" height={((40 * icon.height) / icon.width).toFixed(2)} alt="" loading="lazy" class="footer-icon-img" />}
                 </a>
               </li>
             );

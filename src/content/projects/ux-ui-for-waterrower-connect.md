@@ -44,10 +44,6 @@ As for a user's workout history, the app previously only contained a simple list
 
 In January 2022, the Premium version of WaterRower Connect was launched. One of its features was ''Rowing Together'', where Premium users can row the same workout at the same time. The idea is that a user can create an ‘’online’’ lobby that other users can join via a link. The lobby is connected to a workout that the host has created. When the host presses ‘’Start’’ in the lobby, this workout will start for all users. They are able to see each others’ live data, giving them the feeling of actually rowing together. We went through many iterations of the design for this feature. We wanted it to be informative on what the user was going to execute. We also wanted the flow to be logical and easy to navigate. Furthermore, we wanted to create a feeling for the user that they were doing the workout together. This feature is still being developed further. For example, we are going to add a chat functionality in the lobby, which will help users to connect and discuss details before starting the workout.
 
-‍
-
 ## Conclusion and future plans
 
 Many more designs have been created for the WaterRower Connect app, which unfortunately cannot be shared yet as this is confidential information. I’ll be updating this page once new cool features are released!
-
-‍

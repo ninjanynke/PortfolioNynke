@@ -183,7 +183,14 @@ class RichTextToMarkdown(HTMLParser):
             self._flush_block()
 
     def handle_data(self, data):
-        self._emit(re.sub(r"\s+", " ", data))
+        data = re.sub(r"\s+", " ", data)
+        # A paragraph that starts with "- " or "1. " is plain text on the
+        # Webflow site; escape it so Markdown doesn't make it a list.
+        at_block_start = not self._stack and (not self.parts or "".join(self.parts[-2:]).endswith("\n\n"))
+        if at_block_start and not self._list_stack:
+            data = re.sub(r"^(\s*)([-+*])(\s)", r"\1\\\2\3", data)
+            data = re.sub(r"^(\s*\d+)\.(\s)", r"\1\\.\2", data)
+        self._emit(data)
 
     def _flush_block(self) -> None:
         if self._stack:
@@ -196,6 +203,9 @@ class RichTextToMarkdown(HTMLParser):
             marker, buffer = self._stack.pop()
             self._buf.append("".join(buffer))
         md = "".join(self.parts)
+        # Webflow's empty paragraphs hold only a zero-width joiner; they'd
+        # render as a blank line, so drop them.
+        md = re.sub(r"(?m)^[ \t\u200d\u00a0]+$", "", md)
         md = re.sub(r"[ \t]+\n", "\n", md)
         md = re.sub(r"\n{3,}", "\n\n", md)
         return md.strip()
@@ -221,13 +231,22 @@ def caption(value: str | None) -> str | None:
     return text.strip() or None
 
 
+def paragraphs(value: str | None) -> str | None:
+    """Like caption(), but keeps paragraph breaks as blank lines. For the
+    video text, which is rich text with several paragraphs."""
+    if not value or "<p" not in value:
+        return caption(value)
+    parts = [html_to_plain(p).strip() for p in re.findall(r"<p[^>]*>(.*?)</p>", value, re.S)]
+    return "\n\n".join(p for p in parts if p.strip("\u200d ")) or None
+
+
 def html_to_plain(html: str | None) -> str:
     """Strip tags entirely. Used for the short summary shown in listings."""
     if not html:
         return ""
     text = unescape(re.sub(r"<[^>]+>", " ", html))
     text = re.sub(r"\s+", " ", text)
-    return text.strip()
+    return text.strip(" \u200d")
 
 
 # --------------------------------------------------------------------------
@@ -326,7 +345,7 @@ def yaml_scalar(value) -> str:
     if isinstance(value, (int, float)):
         return str(value)
     text = str(value)
-    escaped = text.replace("\\", "\\\\").replace('"', '\\"')
+    escaped = text.replace("\\", "\\\\").replace('"', '\\"').replace("\n", "\\n")
     return f'"{escaped}"'
 
 
@@ -461,6 +480,8 @@ def main() -> None:
         fm = {
             "title": row.get("CategoryTitle") or row.get("Name"),
             "label": row.get("ThisPage"),
+            # Heading on project pages, e.g. "Design projects".
+            "pageTitle": row.get("Category detailed page title"),
             # 'Name' is prefixed with a sort key in Webflow, e.g. '1_Programmer'
             "order": int(row["Name"].split("_")[0]) if row.get("Name", "")[:1].isdigit() else 99,
             "colour": row.get("Background colour"),
@@ -525,7 +546,7 @@ def main() -> None:
                      "caption": caption(row.get("Project method image_RB text"))},
                 ) if item["src"]
             ],
-            "video": ({"youtube": vid, "caption": caption(row.get("Project video text"))}
+            "video": ({"youtube": vid, "caption": paragraphs(row.get("Project video text"))}
                       if vid else None),
         }
 

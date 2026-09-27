@@ -1,6 +1,6 @@
 ---
 title: "Clay jewelry | part 2"
-summary: "Creating clay jewelry remains one of my hobies, hence this little update post. Since 2022, I have tried out many more techniques, colourways and types of medium (making gradients, combining clay with resin, paint, gold leaf, etcetera). My creations are a lot more clean in their finish as well. I'm pretty much picking out my outfits around my own-made jewelry these days, that's how much I love it! ‍"
+summary: "Creating clay jewelry remains one of my hobies, hence this little update post. Since 2022, I have tried out many more techniques, colourways and types of medium (making gradients, combining clay with resin, paint, gold leaf, etcetera). My creations are a lot more clean in their finish as well. I'm pretty much picking out my outfits around my own-made jewelry these days, that's how much I love it!"
 category: "naai-outline"
 type: "Hobby"
 tags:

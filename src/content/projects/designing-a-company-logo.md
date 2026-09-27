@@ -44,5 +44,3 @@ The font that we decided, Mulish, was also slightly modified to fit in with the 
 And last but not least, a crucial part of the process is convincing people of your vision. My colleague and I needed to convince both of our bosses of our design. We did experience what was written in the design book, namely that non-designers can start giving their own input and expect you to try out their suggestions, even when you know they won't work. Therefore, it's important to recognise that you need to convince people that they should trust you, as you are the designer.
 
 In our last presentation of the final designs, we presented confidently, stood our ground, believed in our vision and it paid off. Our bosses were very happy with the final product and in the meanwhile we have added the logo everywhere, including an awesome neon sign on our office wall.
-
-‍
