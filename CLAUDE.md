@@ -167,6 +167,10 @@ Pixel-perfect is the default; these differ on purpose (owner's decision):
   a fixed 30px on all four pages. "Other projects" titles stop at two lines
   with "…" (the rows keep live's spacing); below 768px many titles are cut,
   since the grid keeps four columns down to 480px.
+- **Footer at the bottom of the window on short pages** (About me, and
+  a-floral-wish on wide screens): `body` is a flex column at least as tall
+  as the window and `<main>` grows. Pages taller than the window are
+  unchanged. Live left the footer halfway up those pages.
 - © year is the current year; About me age is 30; double space in "working
   as" removed.
 

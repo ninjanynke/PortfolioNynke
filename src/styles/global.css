@@ -44,7 +44,12 @@ html {
   text-size-adjust: 100%;
 }
 
+/* The page is a column at least as tall as the window, and <main> takes
+   up any spare height: on a short page the footer sits at the bottom of
+   the window; on a longer page it simply follows the content. */
 body {
+  display: flex;
+  flex-direction: column;
   min-height: 100%;
   margin: 0;
   color: var(--text);
@@ -52,6 +57,10 @@ body {
   font-family: var(--font-fallback);
   font-size: 14px;
   line-height: 20px;
+}
+
+main {
+  flex-grow: 1;
 }
 
 img {
