@@ -2,7 +2,8 @@
 
 Context for anyone (including Claude) picking this up. Content is migrated and
 validates in Astro; every page is built: layout, home, about me, category
-and project pages (see "Build order" below). Next: deploy to GitHub Pages.
+and project pages (see "Build order" below). Live on GitHub Pages at
+https://www.nynkezwart.com since 2026-09-27. Next: cancel Webflow (step 2).
 
 ## Goal
 
@@ -23,7 +24,7 @@ mean touching the content files.
   Rendered by Sätteri (Astro 7's Markdown engine, `@astrojs/markdown-satteri`)
   with **smart punctuation off**, so quotes render exactly as typed, like on
   Webflow.
-- **GitHub Pages** for hosting, custom domain, free HTTPS.
+- **GitHub Pages** for hosting, custom domain, free HTTPS. See "Hosting".
 - No CSS framework chosen yet. No JS framework needed — the site is documents.
 
 Chosen after ruling out: Next.js (too heavy, needs React), React Native (mobile
@@ -227,8 +228,11 @@ given selectors, per breakpoint: the fastest way to get exact values.
 ## Build order
 
 1. ~~Run `migrate.py`, confirm all 179 assets downloaded, commit.~~ Done.
-2. Cancel Webflow. **On hold** until the rebuild matches the old site's look and
-   feel; Webflow is the reference until then.
+2. Cancel Webflow. Nothing depends on it since the DNS switch (2026-09-27),
+   so cancelling breaks nothing. Before cancelling: decide where
+   `reference/shots/` (87 MB, local only) will be kept, since it can't be
+   recaptured once the live Webflow site is gone, and look through Webflow
+   once more for anything not yet copied.
 3. ~~`npm create astro@latest`, drop in `content.config.ts`, get the content
    collections validating.~~ Done: 34 projects, 4 categories, all 170 images
    processed by `astro build` without warnings.
@@ -265,7 +269,38 @@ given selectors, per breakpoint: the fastest way to get exact values.
    where Webflow had them. GIFs are rendered as plain `<img>` so they keep
    animating (`<Image>` would make them a still WebP). Matches live apart
    from the deliberate changes above. Drafts (tikkie) get no page.
-9. Deploy to GitHub Pages, add `CNAME`, point DNS, verify old URLs resolve.
+9. ~~Deploy to GitHub Pages, point DNS, verify old URLs resolve.~~ Done
+   2026-09-27; see "Hosting". All 39 old URLs load over HTTPS on both
+   `www.nynkezwart.com` and `nynkezwart.com`.
+
+## Hosting
+
+Live since 2026-09-27 at **https://www.nynkezwart.com** (the main address,
+as on Webflow; `nynkezwart.com` and `http://` redirect there).
+
+- **Deploys:** every push to `main` builds and publishes the site
+  (`.github/workflows/deploy.yml`, withastro/action + actions/deploy-pages).
+  Takes 2–3 minutes; progress in the repository's Actions tab. Free because
+  the repository (`ninjanynke/PortfolioNynke`) is public.
+- **Repository settings → Pages:** source "GitHub Actions", custom domain
+  `www.nynkezwart.com`, Enforce HTTPS on. With an Actions deploy there's no
+  `CNAME` file; the domain lives in these settings.
+- **Domain and DNS** at Squarespace Domains (account.squarespace.com/domains;
+  moved there from Google Domains). Custom records: four `A` records for
+  `@` (185.199.108.153, .109.153, .110.153, .111.153), `CNAME` `www` →
+  `ninjanynke.github.io`, and `TXT` `_github-pages-challenge-ninjanynke`,
+  which verifies the domain for the GitHub account (keep it: it stops
+  anyone else claiming the domain on GitHub). The `CNAME` to
+  `…dv.googlehosted.com` is an old Google verification record and
+  `_domainconnect` is Squarespace's own; neither affects the site. No
+  email (MX) on the domain.
+- **HTTPS:** a free Let's Encrypt certificate, requested and renewed by
+  GitHub. If it ever gets stuck, removing and re-adding the custom domain
+  in the Pages settings requests a new one.
+- **Paths:** GitHub serves `/projects/macrame` by redirecting to
+  `/projects/macrame/`, so links without a trailing slash (CV, LinkedIn)
+  keep working. The site can't be previewed at
+  `ninjanynke.github.io/PortfolioNynke/`: it uses root paths.
 
 ## To do
 
