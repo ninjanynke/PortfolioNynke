@@ -37,38 +37,24 @@ const { title, cover, type, featuredTag } = project.data;
 </script>
 
 <style>
-  /* 5:6 slot: image on top (80%), title underneath. */
+  /* Image on top (height 96% of the width), title underneath in a strip
+     24% of the width high: a 5:6 card, as on Webflow. A title too long
+     for the strip makes the card taller instead of running out of it. */
   .card-slot {
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
+    container-type: inline-size;
     width: 100%;
-    padding-bottom: 120%;
   }
 
   .card {
-    position: absolute;
-    display: inline-block;
+    display: block;
     width: 100%;
-    height: 100%;
     max-width: 100%;
   }
 
-  .card-inner {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    opacity: 1;
-  }
-
   .card-image {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
+    position: relative;
     width: 100%;
-    height: 80%;
+    aspect-ratio: 100 / 96;
     overflow: hidden;
     border: 1px solid var(--dark-grey);
     border-radius: 5px;
@@ -144,16 +130,39 @@ const { title, cover, type, featuredTag } = project.data;
   .card-tag :global(.sq-bl) { border-bottom-left-radius: 0; }
   .card-tag :global(.sq-br) { border-bottom-right-radius: 0; }
 
+  /* The title strip has a fixed height, so rows are spaced as on Webflow
+     whatever the titles. On narrow cards a two-line title runs past the
+     strip into the space between rows, as it did there. */
   .card-title-box {
-    position: absolute;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    height: 20%;
+    height: 24cqw;
+    padding: 10px 10px 0;
   }
 
+  /* Except in the last row, which ends at its longest title, so the space
+     before the footer is the same whatever the titles are.
+     ("of .card-slot": the list also holds this component's script.) */
+  @media screen and (min-width: 480px) {
+    .card-slot:nth-child(4n + 1 of .card-slot):nth-last-child(-n + 4 of .card-slot) .card-title-box,
+    .card-slot:nth-child(4n + 1 of .card-slot):nth-last-child(-n + 4 of .card-slot) ~ .card-slot .card-title-box {
+      height: auto;
+    }
+  }
+
+  @media screen and (max-width: 479px) {
+    .card-slot:nth-child(2n + 1 of .card-slot):nth-last-child(-n + 2 of .card-slot) .card-title-box,
+    .card-slot:nth-child(2n + 1 of .card-slot):nth-last-child(-n + 2 of .card-slot) ~ .card-slot .card-title-box {
+      height: auto;
+    }
+  }
+
+  /* At most two lines; a longer title ends in "…". */
   .card-title {
-    margin: 10px;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    overflow: hidden;
+    margin: 0;
     color: var(--dim-grey);
     text-align: center;
     font-family: var(--font-ui);
@@ -168,19 +177,6 @@ const { title, cover, type, featuredTag } = project.data;
 
     .card:hover .card-tag {
       opacity: 1;
-    }
-  }
-
-  @media screen and (max-width: 767px) {
-    .card-slot {
-      margin-bottom: 20px;
-    }
-  }
-
-  @media screen and (max-width: 479px) {
-    .card-title {
-      height: 40px;
-      overflow: hidden;
     }
   }
 </style>

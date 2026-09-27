@@ -182,6 +182,14 @@ const others = projects
     margin-top: 20px;
   }
 
+  /* Space before the footer, the same on every category page and at
+     every width: the last row of cards (or the empty-state text) ends
+     flush, then this. A deliberate change: on Webflow it depended on the
+     titles in the last row, and was tight on Programmer. */
+  .others {
+    margin-bottom: 30px;
+  }
+
   .intro-text {
     margin-bottom: 10px;
   }
@@ -197,13 +205,12 @@ const others = projects
   .others-grid {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr 1fr;
-    grid-template-rows: auto auto;
     grid-auto-columns: 1fr;
     gap: 16px;
   }
 
   .empty {
-    padding: 0 0 10px;
+    padding: 0;
     background-color: #fff;
   }
 
@@ -216,6 +223,12 @@ const others = projects
     .section {
       margin-left: 20px;
       margin-right: 20px;
+    }
+
+    /* Rows further apart on phones (Webflow gave each card a 20px bottom
+       margin; as a row gap it doesn't add space after the last row). */
+    .others-grid {
+      row-gap: 36px;
     }
   }
 

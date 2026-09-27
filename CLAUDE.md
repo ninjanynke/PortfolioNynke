@@ -160,6 +160,13 @@ Pixel-perfect is the default; these differ on purpose (owner's decision):
   footer) ran from 0 to 41px depending on what ended the section. Now
   sections end flush and sit `--section-gap` (30px) apart, at every width;
   spacing inside sections is unchanged.
+- **Category pages: fixed space before the footer, two-line card titles.**
+  Live's space before the footer depended on the titles in the last row
+  (tight on Programmer, and on narrow screens titles ran into the footer).
+  Now the last row ends at its longest title and `.others` is followed by
+  a fixed 30px on all four pages. "Other projects" titles stop at two lines
+  with "…" (the rows keep live's spacing); below 768px many titles are cut,
+  since the grid keeps four columns down to 480px.
 - © year is the current year; About me age is 30; double space in "working
   as" removed.
 
