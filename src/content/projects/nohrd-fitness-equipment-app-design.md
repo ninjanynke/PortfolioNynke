@@ -27,6 +27,7 @@ methodPair:
     caption: "The welcome screen that is visible upon opening the app."
 video:
   youtube: "6IcHvTKZOgk"
+  aspect: "6:13"
   caption: "During our design process, we wanted to involve the NOHrD team into our process. We visited their location in Germany to let them test out a prototype of our design. We gave them tasks to achieve without any additional instructions. The tasks were focussed around finding items on the dashboard, filtering down the dashboard based on certain devices, and quick starting versus building a workout by themselves. The overall feedback was positive and with a few comments here and from there we continued our iterations! You can see a little video on the left that clicks through the mock ups that we created."
 ---
 

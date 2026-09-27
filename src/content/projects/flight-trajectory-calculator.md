@@ -22,6 +22,7 @@ methodPair:
     caption: "A screenshot of the design process."
 video:
   youtube: "tYoxYw9R6AM"
+  aspect: "499:1080"
   caption: "Here's a run through of the calculator app. It has three tab views that each allow different calculations."
 ---
 

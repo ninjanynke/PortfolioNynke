@@ -1,8 +1,8 @@
 # nynkezwart.com — Webflow to Astro migration
 
 Context for anyone (including Claude) picking this up. Content is migrated and
-validates in Astro; layout, home, about me and category pages are built (see
-"Build order" below). Next: the project page template.
+validates in Astro; every page is built: layout, home, about me, category
+and project pages (see "Build order" below). Next: deploy to GitHub Pages.
 
 ## Goal
 
@@ -92,7 +92,10 @@ Webflow CDN URLs remain. See `README.md` for usage and the field mapping.
   "27 years old": Nynke is 30 now (2026). CV is 2024. Layout is pixel-perfect;
   stale text like this is fixed rather than copied.
 - Videos are YouTube behind Embedly wrappers. `migrate.py` extracts the video
-  ID; use a plain iframe or `lite-youtube-embed`.
+  ID; the rebuild uses a plain `youtube-nocookie.com` iframe. Webflow sized
+  players from YouTube's oEmbed, which only ever says 16:9 or 4:3, so 9 of
+  the 15 were the wrong shape (square and portrait videos). See
+  "Deliberate changes" for how shapes are handled now.
 - Reference collections (types, tags, skills) were flattened to strings —
   they held only a name and a slug. 8 types, 21 tags, 59 skills.
 
@@ -109,7 +112,7 @@ Webflow CDN URLs remain. See `README.md` for usage and the field mapping.
   Lottie walking text on category pages (`lottie-web`, MIT).
 - **Fonts bundled** via Fontsource (OFL), not loaded from Google. Used:
   Montserrat 200/400/500/600/700 and Esteban 400. Bitter is loaded by the old
-  site but used in only one rule; check before bundling it.
+  site but only used by `.block-quote`, which no page uses: not bundled.
 - **Order** (changed 2026-09-23): shared layout + footer → home → about me →
   category page → project page. Per template: build, compare against the reference, list the
   differences, get sign-off, then ask before committing.
@@ -171,6 +174,21 @@ Pixel-perfect is the default; these differ on purpose (owner's decision):
   a-floral-wish on wide screens): `body` is a flex column at least as tall
   as the window and `<main>` grows. Pages taller than the window are
   unchanged. Live left the footer halfway up those pages.
+- **Videos in their own shape.** Each player has its video's real shape,
+  stored as `video.aspect` in the project's frontmatter ("1:1", "9:16";
+  16:9 is the default and left out). `node scripts/video-aspects.mjs`
+  checks every video against YouTube and `--write` fixes the files: run it
+  after adding or replacing a video (a re-run of `migrate.py` would drop
+  `aspect`). It reads the file sizes from YouTube's watch page, not an
+  official API, so it may break if YouTube changes that page; the site
+  never depends on it. Players are never taller than 560px or 75% of the
+  window. From 768px up the player sits left and the text starts 20px
+  after it (a narrow player leaves the text more room); below that it is
+  centred above the text, at most 70% wide like the full-width Method
+  image (100% below 480px).
+- **Footer spacing on phones:** the space above "Spot me in other places!"
+  is 20px at every width (live doubled it below 768px and added 20px more
+  below 480px).
 - © year is the current year; About me age is 30; double space in "working
   as" removed.
 
@@ -237,12 +255,16 @@ given selectors, per breakpoint: the fastest way to get exact values.
    cards show `highlightSummary` (Webflow's separate "Highlighted text")
    when set, else `summary`. `global.css` sets `box-sizing: border-box` on
    everything, as Webflow does.
-8. Project page template. Frontmatter carries metadata, cover, gallery and the
-   side-by-side `methodPair`; the Markdown body carries method text, the
-   full-width image and the conclusion, already in the right order.
-   **GIFs:** 22 project images are GIFs, and `<Image>` converts them to a
-   single-frame WebP. Render GIFs with a plain `<img src={img.src}>` (or
-   `format="gif"`) so they keep animating.
+8. ~~Project page template.~~ Done: `projects/[slug].astro` (facts, key
+   work, gallery), `ProjectBody.astro` (method, video, conclusion),
+   `ProjectImage.astro`, `Lightbox.astro` (click an image to see it large;
+   gallery images page through each other). Frontmatter carries metadata,
+   cover, gallery and the side-by-side `methodPair`; the Markdown body
+   carries method text, the full-width image and the conclusion, and
+   `ProjectBody` splits it at the headings and the image to place the parts
+   where Webflow had them. GIFs are rendered as plain `<img>` so they keep
+   animating (`<Image>` would make them a still WebP). Matches live apart
+   from the deliberate changes above. Drafts (tikkie) get no page.
 9. Deploy to GitHub Pages, add `CNAME`, point DNS, verify old URLs resolve.
 
 Content editing after launch is undecided: either Markdown directly in Git, or

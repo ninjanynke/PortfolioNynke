@@ -23,6 +23,7 @@ cover: "./waterrower-connect-app/images/screenshot-2022-01-08-at-12.05.14.png"
 draft: false
 video:
   youtube: "uHejbYyRuLU"
+  aspect: "623:1280"
   caption: "In January 2022, the Premium version of WaterRower Connect was launched. One of its features was ''Rowing Together'', where Premium users can row the same workout at the same time. The idea is that a user can create an ‘’online’’ lobby that other users can join via a link. The lobby is connected to a workout that the host has created. When the host presses ‘’Start’’ in the lobby, this workout will start for all users. They are able to see each others’ live data, giving them the feeling of actually rowing together. I implemented many parts of this feature, from designs to big parts of the navigation and the requests to create the session links and retrieve a session as a guest. This video shows the feature in action, when we tried it with our company team."
 ---
 

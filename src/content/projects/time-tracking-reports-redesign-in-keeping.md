@@ -28,7 +28,7 @@ methodPair:
     caption: "Clickthrough of improved date management design."
 video:
   youtube: "BILIa8kMxR8"
-  aspect: "4:3"
+  aspect: "232:135"
   caption: "The biggest change of the redesign is the transition from tabs to a dashboard layout (see video). The dashboard boxes contain five entries for each possible logging type (users, projects, tasks, clients, integrations). Clicking on a box leads to a detailed report page, where the visualisation from the box is displayed in full, including a list with the information in text form. Clicking on specific elements from the graph or list leads to a deeper dashboard of information. The user's path can be seen in a breadcrumb in the top part of the page, under the date picker. For experienced users who know what they are searching for, we have introduced a filter bar on the top, which is customised to allow easy filtering for the different logging types. All sorts of combinations are possible."
 ---
 

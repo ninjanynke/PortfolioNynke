@@ -88,8 +88,9 @@ const projects = defineCollection({
         .object({
           youtube: z.string(),
           caption: z.string().optional(),
-          // Shape of the player, "width:height". Default 16:9; a few
-          // videos were shown 4:3 on the Webflow site.
+          // The video's shape, "width:height" ("1:1", "9:16"…), so the
+          // player matches it. Default 16:9. Filled in and checked against
+          // YouTube by scripts/video-aspects.mjs.
           aspect: z.string().regex(/^\d+:\d+$/).optional(),
         })
         .optional(),

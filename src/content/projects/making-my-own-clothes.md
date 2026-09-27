@@ -37,6 +37,7 @@ methodPair:
     caption: "One of the first blouses I've sewn. It isn't flawless but I was really happy with it at the time."
 video:
   youtube: "1tGFTGhGjWU"
+  aspect: "9:16"
   caption: "Of course I wore the outfit during the concert and afterwards the lead singer spotted me outside and said to me: ''You did such an amazing job, so amazing, you've got so much talent.'' And the bassist said, ''Wow amazing, these look exactly like the ones from Eurovision'' and ''Such cool pants!''. I am still amazed by the fact that Måneskin themselves have seen, held, signed my outfit. I can't quite believe it still. Here is an article of the radio about the day, and some more footage is included in the video on this page, such as the creation process. Click here if you want to see this video on TikTok and more behind the scenes videos as well!"
 ---
 

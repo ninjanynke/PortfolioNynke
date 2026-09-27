@@ -29,6 +29,7 @@ methodPair:
     caption: "Sharing your workout on social media."
 video:
   youtube: "uHejbYyRuLU"
+  aspect: "623:1280"
   caption: "Here you can see the designs in action! This is actually the released app. Besides designing, I (mostly) implemented the design for Android as well."
 ---
 

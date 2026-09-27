@@ -64,9 +64,9 @@ const fullCaption = imagePara?.[1] ?? '';
 const pair = [...methodPair].reverse();
 const hasMethod = pair.length > 0 || text1 || fullWidth || text2;
 
-// Player height as a share of its width: 480/854 for 16:9, as Webflow had.
-const [aspectW, aspectH] = (video?.aspect ?? '854:480').split(':').map(Number);
-const playerHeight = `${(100 * aspectH) / aspectW}%`;
+// The player has the video's own shape (scripts/video-aspects.mjs keeps
+// `aspect` in step with YouTube), so it shows without black bars.
+const [aspectW, aspectH] = (video?.aspect ?? '16:9').split(':').map(Number);
 // The video text is plain text; a blank line starts a new paragraph.
 const videoText = video?.caption?.split(/\n\s*\n/) ?? [];
 ---
@@ -115,9 +115,8 @@ const videoText = video?.caption?.split(/\n\s*\n/) ?? [];
 {video && (
   <section class="video">
     <h2 class="label" style={`border-color: ${colour}`}>Video</h2>
-    <div class:list={['video-grid', { 'no-text': videoText.length === 0 }]}>
-      {videoText.length > 0 && <div class="video-text rich-text">{videoText.map((paragraph) => <p>{paragraph}</p>)}</div>}
-      <div class="video-frame" style={`padding-top: ${playerHeight}`}>
+    <div class="video-row">
+      <div class="video-frame" style={`--aspect-w: ${aspectW}; --aspect-h: ${aspectH}`}>
         <iframe
           src={`https://www.youtube-nocookie.com/embed/${video.youtube}`}
           title="YouTube video"
@@ -126,6 +125,7 @@ const videoText = video?.caption?.split(/\n\s*\n/) ?? [];
           allowfullscreen
         ></iframe>
       </div>
+      {videoText.length > 0 && <div class="video-text rich-text">{videoText.map((paragraph) => <p>{paragraph}</p>)}</div>}
     </div>
   </section>
 )}
@@ -231,23 +231,27 @@ const videoText = video?.caption?.split(/\n\s*\n/) ?? [];
     margin-bottom: 0;
   }
 
-  /* Video: player left, text right. */
-  .video-grid {
-    display: grid;
-    grid-template-areas: "player text";
-    grid-template-columns: 1fr 1fr;
-    grid-auto-columns: 1fr;
+  /* Video: player left, text right, 20px apart. The player has the
+     video's shape: half the row wide, but never taller than 560px or 75%
+     of the window, so portrait and square videos get narrower and the
+     text moves up to stay 20px from them. */
+  .video-row {
+    display: flex;
+    align-items: flex-start;
     gap: 20px;
   }
 
-  .video-text {
-    grid-area: text;
+  .video-frame {
+    --max-height: min(560px, 75vh);
+    position: relative;
+    flex: none;
+    width: min(50% - 10px, var(--max-height) * var(--aspect-w) / var(--aspect-h));
+    aspect-ratio: var(--aspect-w) / var(--aspect-h);
   }
 
-  .video-frame {
-    position: relative;
-    grid-area: player;
-    width: 100%;
+  .video-text {
+    flex: 1;
+    min-width: 0;
   }
 
   .video-frame iframe {
@@ -277,13 +281,17 @@ const videoText = video?.caption?.split(/\n\s*\n/) ?? [];
       text-align: left;
     }
 
-    .video-grid {
-      grid-template-areas: "player" "text";
-      grid-template-columns: 1fr;
+    /* Narrow screens: player on top, centred, text below. At most 70%
+       wide like the full-width Method image (100% on phones, below). */
+    .video-row {
+      flex-direction: column;
+      align-items: stretch;
     }
 
-    .video-grid.no-text {
-      grid-template-areas: "player";
+    .video-frame {
+      --max-width: 70%;
+      align-self: center;
+      width: min(var(--max-width), var(--max-height) * var(--aspect-w) / var(--aspect-h));
     }
   }
 
@@ -302,6 +310,10 @@ const videoText = video?.caption?.split(/\n\s*\n/) ?? [];
 
     .full-grid :global(.full-image) {
       width: calc(100% - 2px);
+    }
+
+    .video-frame {
+      --max-width: 100%;
     }
 
     .full-caption {

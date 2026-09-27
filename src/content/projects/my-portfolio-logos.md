@@ -22,6 +22,7 @@ methodPair:
     caption: "Outlined logos"
 video:
   youtube: "6IcHvTKZOgk"
+  aspect: "6:13"
 ---
 
 ## Method
