@@ -267,6 +267,18 @@ given selectors, per breakpoint: the fastest way to get exact values.
    from the deliberate changes above. Drafts (tikkie) get no page.
 9. Deploy to GitHub Pages, add `CNAME`, point DNS, verify old URLs resolve.
 
+## To do
+
+- **Page weight.** The category cards (`HighlightCard.astro`,
+  `ProjectCard.astro`) use each project's original cover file as a CSS
+  background, so category pages load full-size images: Maker 27 MB,
+  Designer 13 MB (measured 2026-09-27). Serve resized covers instead
+  (e.g. `getImage()` at the card's display size, or an `<Image>` with
+  `object-fit: cover` in place of the background). GIF covers and
+  gallery GIFs are up to ~4 MB each and stay GIFs to keep animating;
+  consider converting them to video (MP4/WebM) or animated WebP. The
+  build is 317 MB, fine for GitHub Pages (1 GB limit) but worth trimming.
+
 Content editing after launch is undecided: either Markdown directly in Git, or
 Sveltia CMS for a visual admin panel that commits to the repo. Doesn't block
 anything — decide once the site is up.

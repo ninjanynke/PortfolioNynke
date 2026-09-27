@@ -4,7 +4,8 @@ import { satteri } from '@astrojs/markdown-satteri';
 
 // https://astro.build/config
 export default defineConfig({
-  site: 'https://nynkezwart.com',
+  // The live address; nynkezwart.com redirects here.
+  site: 'https://www.nynkezwart.com',
   markdown: {
     processor: satteri({
       // Keep punctuation exactly as written: the Webflow content mixes
