@@ -1,5 +1,6 @@
 ---
 import type { CollectionEntry } from 'astro:content';
+import CardCover from './CardCover.astro';
 
 interface Props {
   project: CollectionEntry<'projects'>;
@@ -13,7 +14,14 @@ const { title, cover, type, featuredTag } = project.data;
 <li class="card-slot" data-card>
   <a href={`/projects/${project.id}`} class="card">
     <div class="card-inner">
-      <div class="card-image" style={cover ? `background-image: url("${cover.src}")` : undefined}>
+      <div class="card-image">
+        {cover && (
+          <CardCover
+            src={cover}
+            widths={[240, 480, 720]}
+            sizes="(max-width: 479px) calc(50vw - 28px), (max-width: 767px) calc(25vw - 22px), (max-width: 991px) 170px, 223px"
+          />
+        )}
         <div class="card-veil">
           <div class="card-tags">
             {[type, featuredTag].filter(Boolean).map((tag) => (
@@ -58,11 +66,10 @@ const { title, cover, type, featuredTag } = project.data;
     overflow: hidden;
     border: 1px solid var(--dark-grey);
     border-radius: 5px;
-    background-position: 50%;
-    background-size: cover;
   }
 
   .card-veil {
+    position: relative;
     width: 100%;
     height: 100%;
     background-color: rgba(255, 255, 255, 0.35);

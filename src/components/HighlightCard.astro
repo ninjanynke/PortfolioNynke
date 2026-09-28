@@ -1,5 +1,6 @@
 ---
 import type { CollectionEntry } from 'astro:content';
+import CardCover from './CardCover.astro';
 
 interface Props {
   project: CollectionEntry<'projects'>;
@@ -15,7 +16,16 @@ const tags = [featuredTag, type].filter(Boolean);
   <a href={`/projects/${project.id}`} class="highlight">
     <div class="highlight-card">
       <div>
-        <div class="highlight-image" style={cover ? `background-image: url("${cover.src}")` : undefined}></div>
+        <div class="highlight-image">
+          {cover && (
+            <CardCover
+              src={cover}
+              widths={[450, 900, 1300]}
+              sizes="(max-width: 479px) calc(100vw - 80px), (max-width: 767px) calc(50vw - 68px), (max-width: 991px) 316px, 422px"
+              loading="eager"
+            />
+          )}
+        </div>
         <div class="highlight-title" style={`border-color: ${colour}`}>{title}</div>
         <p class="highlight-summary">{highlightSummary ?? summary}</p>
       </div>
@@ -54,12 +64,11 @@ const tags = [featuredTag, type].filter(Boolean);
   }
 
   .highlight-image {
+    position: relative;
     width: 100%;
     padding-bottom: 50%;
+    overflow: hidden;
     border-radius: 5px;
-    background-position: 50%;
-    background-repeat: no-repeat;
-    background-size: cover;
   }
 
   .highlight-title {

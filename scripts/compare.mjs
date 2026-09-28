@@ -52,6 +52,17 @@ async function freezeLotties(page) {
   await page.waitForTimeout(200);
 }
 
+// A full-page screenshot doesn't scroll, so lazy images below the first
+// screen never load. Load them all up front (scrolling instead would set
+// off the scroll-activated card states).
+async function loadLazyImages(page) {
+  await page.evaluate(async () => {
+    const imgs = [...document.querySelectorAll('img[loading="lazy"]')];
+    for (const img of imgs) img.loading = 'eager';
+    await Promise.all(imgs.map((img) => img.decode().catch(() => {})));
+  });
+}
+
 function crop(png, y, height) {
   const out = new PNG({ width: png.width, height });
   PNG.bitblt(png, out, 0, y, png.width, height, 0, 0);
@@ -67,6 +78,7 @@ for (const width of WIDTHS) {
     const livePage = await browser.newPage({ viewport: { width, height: 900 }, deviceScaleFactor: 1 });
     await livePage.goto(LIVE + localPath, { waitUntil: 'networkidle' });
     await livePage.evaluate(() => document.fonts.ready);
+    await loadLazyImages(livePage);
     await freezeLotties(livePage);
     ref = PNG.sync.read(await livePage.screenshot({ fullPage: true }));
     await livePage.close();
@@ -76,6 +88,7 @@ for (const width of WIDTHS) {
   const page = await browser.newPage({ viewport: { width, height: 900 }, deviceScaleFactor: 1 });
   await page.goto(LOCAL + localPath, { waitUntil: 'networkidle' });
   await page.evaluate(() => document.fonts.ready);
+  await loadLazyImages(page);
   if (againstLive) await freezeLotties(page);
   // Astro's dev toolbar floats over the bottom of the page.
   await page.evaluate(() => document.querySelector('astro-dev-toolbar')?.remove());

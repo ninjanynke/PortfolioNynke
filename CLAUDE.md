@@ -266,8 +266,9 @@ given selectors, per breakpoint: the fastest way to get exact values.
    cover, gallery and the side-by-side `methodPair`; the Markdown body
    carries method text, the full-width image and the conclusion, and
    `ProjectBody` splits it at the headings and the image to place the parts
-   where Webflow had them. GIFs are rendered as plain `<img>` so they keep
-   animating (`<Image>` would make them a still WebP). Matches live apart
+   where Webflow had them. GIFs go through `<Image>` too: Astro's sharp
+   service turns them into animated WebP, keeping every frame and the
+   loop. Matches live apart
    from the deliberate changes above. Drafts (tikkie) get no page.
 9. ~~Deploy to GitHub Pages, point DNS, verify old URLs resolve.~~ Done
    2026-09-27; see "Hosting". All 39 old URLs load over HTTPS on both
@@ -304,15 +305,14 @@ as on Webflow; `nynkezwart.com` and `http://` redirect there).
 
 ## To do
 
-- **Page weight.** The category cards (`HighlightCard.astro`,
-  `ProjectCard.astro`) use each project's original cover file as a CSS
-  background, so category pages load full-size images: Maker 27 MB,
-  Designer 13 MB (measured 2026-09-27). Serve resized covers instead
-  (e.g. `getImage()` at the card's display size, or an `<Image>` with
-  `object-fit: cover` in place of the background). GIF covers and
-  gallery GIFs are up to ~4 MB each and stay GIFs to keep animating;
-  consider converting them to video (MP4/WebM) or animated WebP. The
-  build is 317 MB, fine for GitHub Pages (1 GB limit) but worth trimming.
+- ~~**Page weight.**~~ Done 2026-09-28. Card covers are resized WebP at
+  the card's display size (`CardCover.astro`; cards below the first
+  screen load lazily), and GIFs everywhere become animated WebP, 4–10×
+  smaller at the same size and quality. Category pages (all images,
+  largest sizes): Maker 28.8 → 2.7 MB, Designer 14.5 → 0.9 MB,
+  Programmer 3.6 → 0.3 MB, Florist 1.5 → 0.8 MB. The heaviest image
+  left is the NOHRD screen recording (152 frames, 3.7 MB), which only a
+  real video would shrink much further.
 
 Content editing after launch is undecided: either Markdown directly in Git, or
 Sveltia CMS for a visual admin panel that commits to the repo. Doesn't block

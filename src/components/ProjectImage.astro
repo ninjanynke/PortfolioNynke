@@ -1,7 +1,7 @@
 ---
 // A project image inside a lightbox link: the link opens a large version,
-// the <img> shows a size fit for the layout. GIFs are left as they are,
-// because Astro's image pipeline would turn them into a still WebP.
+// the <img> shows a size fit for the layout. GIFs become animated WebP
+// (Astro's sharp service keeps every frame).
 import type { ImageMetadata } from 'astro';
 import { Image, getImage } from 'astro:assets';
 
@@ -18,8 +18,7 @@ interface Props {
 }
 
 const { src, alt = '', group, sizes, class: className, imgClass, style } = Astro.props;
-const isGif = src.format === 'gif';
-const large = isGif ? src : await getImage({ src, width: Math.min(src.width, 2000) });
+const large = await getImage({ src, width: Math.min(src.width, 2000) });
 const widths = [400, 800, 1200, 1600].filter((w) => w < src.width).concat(src.width);
 // Resized copies have rounded heights, so their shape drifts a little from
 // the original's. The layout uses the original's exact shape instead, as
@@ -28,10 +27,6 @@ const ratio = `--ratio: ${src.width} / ${src.height}`;
 ---
 
 <a href={large.src} data-lightbox={group ?? ''} class={className} style={style}>
-  {isGif ? (
-    <img src={src.src} width={src.width} height={src.height} alt={alt} loading="lazy" decoding="async" class={imgClass} style={ratio} />
-  ) : (
-    <Image src={src} widths={widths} sizes={sizes} alt={alt} class={imgClass} style={ratio} />
-  )}
+  <Image src={src} widths={widths} sizes={sizes} alt={alt} class={imgClass} style={ratio} />
   <slot />
 </a>
