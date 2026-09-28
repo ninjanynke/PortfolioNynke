@@ -89,6 +89,11 @@ const { title, colour, logo, logoHover } = category.data;
     opacity: 0;
   }
 
+  /* The white and the coloured title share one grid cell, like the logos,
+     so they are always in exactly the same place. (Webflow positioned the
+     coloured one absolutely and centred it with justify-self, which Safari
+     ignores for absolutely positioned items: the title jumped left when the
+     tile turned active.) */
   .tile-label {
     display: grid;
     grid-template-columns: 1fr;
@@ -96,17 +101,16 @@ const { title, colour, logo, logoHover } = category.data;
     justify-items: stretch;
   }
 
-  .label-colour {
-    position: absolute;
-    justify-self: center;
+  .label-colour,
+  .label-white {
+    grid-area: 1 / 1;
     text-align: center;
+    font-family: var(--font-ui);
   }
 
   .label-white {
     position: relative;
     color: #fff;
-    text-align: center;
-    font-family: var(--font-ui);
   }
 
   /* Active state, one look at every width (a deliberate change from the live
