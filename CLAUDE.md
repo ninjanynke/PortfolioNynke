@@ -3,7 +3,8 @@
 Context for anyone (including Claude) picking this up. Content is migrated and
 validates in Astro; every page is built: layout, home, about me, category
 and project pages (see "Build order" below). Live on GitHub Pages at
-https://www.nynkezwart.com since 2026-09-27. Next: cancel Webflow (step 2).
+https://www.nynkezwart.com since 2026-09-27; Webflow cancelled 2026-09-28.
+The migration is finished. Open items: see "To do".
 
 ## Goal
 
@@ -200,9 +201,8 @@ given selectors, per breakpoint: the fastest way to get exact values.
 ## Build order
 
 1. ~~Migrate the Webflow content and assets.~~ Done.
-2. Cancel Webflow. Nothing depends on it since the DNS switch (2026-09-27),
-   so cancelling breaks nothing. Left before cancelling: look through
-   Webflow once more for anything not yet copied.
+2. ~~Cancel Webflow.~~ Done 2026-09-28. The old site no longer exists;
+   `reference/` is what's left of it.
 3. ~~`npm create astro@latest`, drop in `content.config.ts`, get the content
    collections validating.~~ Done: 34 projects, 4 categories, all 170 images
    processed by `astro build` without warnings.
@@ -284,6 +284,14 @@ as on Webflow; `nynkezwart.com` and `http://` redirect there).
   left is the NOHRD screen recording (152 frames, 3.7 MB), which only a
   real video would shrink much further.
 
-Content editing after launch is undecided: either Markdown directly in Git, or
-Sveltia CMS for a visual admin panel that commits to the repo. Doesn't block
-anything — decide once the site is up.
+- **`tikkie`:** the one draft (see "Known issues"). Finish or delete.
+
+## Editing content
+
+Decided 2026-09-28: Markdown in Git, no admin panel. The owner edits
+through Claude: describes the change or hands over text and images, Claude
+edits the files, shows the result on the dev server, and commits and pushes
+after a yes. Small text fixes can also be made directly on github.com. How a
+project file is laid out is in `README.md`. Sveltia CMS (MIT, commits to the
+repo) stays an option if a visual editor is ever wanted; it would need a
+GitHub token or a small OAuth service to sign in.
