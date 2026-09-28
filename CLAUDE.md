@@ -45,55 +45,40 @@ than over-promising if this comes up.
   Each has a background colour used as the page theme.
 - 34 project pages at `/projects/<slug>`.
 - `/aboutme` — static, not in the CMS. Copy by hand.
-- CV as a PDF: `webflow-assets-2026-09-23/CV - Nynke Zwart - 2024.pdf`. Only the
-  latest CV goes in the repo; the 2021–2023 versions stay in the local zip.
+- CV as a PDF, now `public/cv/nynke-zwart-cv.pdf`. Only the latest CV goes
+  in the repo.
 
 **Keep the URL paths identical.** They're on a CV and on LinkedIn.
 
 ## Migration
 
-Done 2026-09-23. `migrate.py` turned the six Webflow CSV exports into
+Done 2026-09-23: the Webflow CMS export became
 `src/content/{projects,categories}/*.md` and `src/data/footer.json`, with each
 image next to the Markdown that uses it (`src/content/projects/<slug>/images/`,
-referenced as `./<slug>/images/foo.jpg`). All 189 image references resolve; no
-Webflow CDN URLs remain. See `README.md` for usage and the field mapping.
-
-- `assets/webflow/` is a flat backup of all 179 CDN files, taken before the
-  content run. It is **gitignored and local only**. `migrate.py` copies from it
-  instead of downloading, so the script still works after Webflow is gone.
-  Delete it once the Astro build validates (step 3).
-- `asset-manifest.tsv` lists each CDN URL and where it landed.
-  `download-assets.sh` is a curl-only fallback that refills `assets/webflow/`
-  (it only works while Webflow's CDN is still up).
-- Python deps live in `.venv/` (`requests`, plus `pyyaml` for checking).
+referenced as `./<slug>/images/foo.jpg`). The Markdown files are the source
+now; the migration tooling is gone from the repo.
 
 ## Known issues in the source content
 
 - `tikkie` is a draft with no category set. Invisible on the live site. Decide:
   finish or delete.
-- The Etsy footer entry has no URL in the export, so `migrate.py` skips it.
-  Added by hand to `src/data/footer.json` (2026-09-24, ClubKekeJewelry shop,
-  after GitHub); a re-run of the migration would drop it again. With 8
+- The Etsy footer entry had no URL in the Webflow export; added by hand
+  to `src/data/footer.json` (ClubKekeJewelry shop, after GitHub). With 8
   icons the footer shows one row down to 768px, then 4+4 (480–767) and
   3+3+2 on phones, always at 40px (live had 7 icons, shrinking at 600).
 - `design-outline` is the only category with a Lottie animation, and its URL
   points at a **different Webflow project** (site ID `5f36f3d3…`, not
-  `5f3a5425…`). That file (`5f708f871837f3269e6b940f_render.json`) is backed
-  up and is the same size as `design_walkingtext.json` (26,703 bytes); it is the
-  only asset from the second project. The four `*_walkingtext.json` Lotties
-  are in `webflow-assets-2026-09-23/`.
+  `5f3a5425…`); it is the same file as `design_walkingtext.json`.
 - ~~Several live pages render broken~~: checked 2026-09-23, **they don't**.
   "No pictures found." is Webflow's hidden empty-state text (in all 33 project
   pages, never visible); `href="#"` links are Webflow lightboxes (clicking an
   image opens it large, so the rebuild needs a lightbox too); 16 projects
   simply have no conclusion, which is fine: sections without content are
-  hidden. YouTube embeds load late, so they show as blank space in
-  `reference/shots/`; they work on the live site.
+  hidden.
 - Footer says © 2021: show the current year (2026) instead. About me says
   "27 years old": Nynke is 30 now (2026). CV is 2024. Layout is pixel-perfect;
   stale text like this is fixed rather than copied.
-- Videos are YouTube behind Embedly wrappers. `migrate.py` extracts the video
-  ID; the rebuild uses a plain `youtube-nocookie.com` iframe. Webflow sized
+- Videos were YouTube behind Embedly wrappers; the rebuild uses a plain `youtube-nocookie.com` iframe. Webflow sized
   players from YouTube's oEmbed, which only ever says 16:9 or 4:3, so 9 of
   the 15 were the wrong shape (square and portrait videos). See
   "Deliberate changes" for how shapes are handled now.
@@ -130,8 +115,6 @@ Pixel-perfect is the default; these differ on purpose (owner's decision):
   only while the visitor is scrolling: nothing is active on page load, and
   the tile goes back to rest after 2 s without scrolling (`IDLE_MS` in
   `src/scripts/scroll-activate.ts`).
-  Note: the live reference shots at 600/375 show the top logos filled,
-  because the capture scrolled and triggered the live site's own effect.
 - **Home tile logos always the same size.** Live stretches the filled logo
   wider than the outline between 380–479px and 740–780px.
 - **"Other projects" cards, active state everywhere**, same idea as the
@@ -139,8 +122,7 @@ Pixel-perfect is the default; these differ on purpose (owner's decision):
   triggered by hover where the device can hover, and by scrolling on touch
   screens and windows under 768px (shared `scroll-activate.ts`). Live only
   did this from 992px up; below that it showed the type tag permanently
-  (768–991) or never showed tags or the veil (≤767), so reference shots at
-  900/600/375 differ there. The Highlights cards get their hover shadow the
+  (768–991) or never showed tags or the veil (≤767). The Highlights cards get their hover shadow the
   same way.
 - **Wrapped card tags split into one pill per line**, flush right, lines
   touching, with the touching corners squared (`src/scripts/tag-lines.ts`).
@@ -179,8 +161,7 @@ Pixel-perfect is the default; these differ on purpose (owner's decision):
   stored as `video.aspect` in the project's frontmatter ("1:1", "9:16";
   16:9 is the default and left out). `node scripts/video-aspects.mjs`
   checks every video against YouTube and `--write` fixes the files: run it
-  after adding or replacing a video (a re-run of `migrate.py` would drop
-  `aspect`). It reads the file sizes from YouTube's watch page, not an
+  after adding or replacing a video. It reads the file sizes from YouTube's watch page, not an
   official API, so it may break if YouTube changes that page; the site
   never depends on it. Players are never taller than 560px or 75% of the
   window. From 768px up the player sits left and the text starts 20px
@@ -193,31 +174,22 @@ Pixel-perfect is the default; these differ on purpose (owner's decision):
 - © year is the current year; About me age is 30; double space in "working
   as" removed.
 
-## Reference capture
+## Reference
 
-`reference/` is the archive of the live site, so the rebuild has a reference
-after Webflow is cancelled. `node scripts/capture-reference.mjs [paths…]`
-(re)creates it with Playwright driving the local Chrome:
+`reference/` is the record of the Webflow site, in the repo: `html/` (raw
+HTML of each page), `webflow/` (the site stylesheet and `webflow.js`, which
+holds the interaction definitions under `Webflow.require('ix2').init(...)`)
+and `assets/` (files placed directly on pages, outside the CMS: logo, quote
+mark, arrows, Lotties). The live site was published from Webflow project `5f36f3d3…`;
+the CMS images sat on `5f3a5425…`.
 
-- `shots/<1280|900|600|375>/<page>.png`: full-page screenshots, one width
-  per breakpoint range. 39 pages (tikkie is a draft, so not live).
-  **Local only** (gitignored, 87 MB), on the owner's laptop. They can only
-  be recreated while the live site is up, so don't cancel Webflow without
-  deciding where they'll be kept.
-- `html/`: raw HTML of each page.
-- `webflow/`: the site stylesheet and `webflow.js` (holds the interaction
-  definitions under `Webflow.require('ix2').init(...)`).
-- `assets/`: files placed directly on pages, outside the CMS: logo, quote
-  mark, arrows, Lotties.
-
-The live site is published from Webflow project `5f36f3d3…`; the CMS images
-sit on `5f3a5425…`.
-
-`node scripts/compare.mjs <local path> <reference name> [header,footer,full]`
-pixel-diffs the running dev server against `shots/` at all four widths and
-writes red-highlighted diffs to `reference/diff/` (gitignored). `--live`
-diffs against the live site itself, with Lottie animations on both sides
-frozen on the same frame (`--frame=N`): needed for animated pages. Set
+`node scripts/compare.mjs <local path> <name> [header,footer,full]`
+pixel-diffs the running dev server against the live site
+(www.nynkezwart.com, i.e. the last deploy) at all four widths, with Lottie
+animations on both sides frozen on the same frame (`--frame=N`), and writes
+red-highlighted diffs to `reference/diff/` (gitignored, safe to empty).
+Lazy images are loaded before capture; animated images differ wherever the
+two captures caught different frames. Set
 `LOCAL_URL=http://localhost:4322` to diff a production build served by
 `npx astro preview --port 4322` instead: the dev server caches rendered
 Markdown and can serve stale output after config changes, and doesn't
@@ -227,12 +199,10 @@ given selectors, per breakpoint: the fastest way to get exact values.
 
 ## Build order
 
-1. ~~Run `migrate.py`, confirm all 179 assets downloaded, commit.~~ Done.
+1. ~~Migrate the Webflow content and assets.~~ Done.
 2. Cancel Webflow. Nothing depends on it since the DNS switch (2026-09-27),
-   so cancelling breaks nothing. Before cancelling: decide where
-   `reference/shots/` (87 MB, local only) will be kept, since it can't be
-   recaptured once the live Webflow site is gone, and look through Webflow
-   once more for anything not yet copied.
+   so cancelling breaks nothing. Left before cancelling: look through
+   Webflow once more for anything not yet copied.
 3. ~~`npm create astro@latest`, drop in `content.config.ts`, get the content
    collections validating.~~ Done: 34 projects, 4 categories, all 170 images
    processed by `astro build` without warnings.

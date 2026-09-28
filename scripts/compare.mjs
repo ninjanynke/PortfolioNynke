@@ -1,26 +1,26 @@
-// Pixel-diff the local rebuild against the archived live-site screenshots.
+// Pixel-diff the local site against the live one (https://www.nynkezwart.com).
 //
-//   node scripts/compare.mjs <local path> <reference name> [regions]
+//   node scripts/compare.mjs <local path> <name> [regions]
 //   node scripts/compare.mjs / index header,footer
 //   node scripts/compare.mjs /projects/trombone-lamp projects__trombone-lamp full
 //
 // Regions:
 //   header  top of the page down to the bottom of .site-header (+ shadow)
 //   footer  the last <footer> height of the page, from the bottom
-//   full    the whole page (only meaningful once the template is done)
+//   full    the whole page
 //
-// Add --live to diff against the live site itself instead of reference/shots/:
-// both pages are captured fresh with every Lottie animation frozen on the
-// same frame (--frame=N, default 0), so animated pages can be compared.
-//   node scripts/compare.mjs /aboutme aboutme full --live --frame=30
+// Both pages are captured fresh, with every Lottie animation frozen on the
+// same frame (--frame=N, default 0). Animated GIFs can't be frozen, so they
+// differ wherever the two captures caught different frames.
+//   node scripts/compare.mjs /aboutme aboutme full --frame=30
 //
-// Needs the dev server on http://localhost:4321 and reference/shots/.
+// Needs the dev server on http://localhost:4321 (or LOCAL_URL).
 // Writes red-highlighted diffs to reference/diff/<width>/<name>-<region>.png.
 
 import { chromium } from 'playwright';
 import pixelmatch from 'pixelmatch';
 import { PNG } from 'pngjs';
-import { mkdir, readFile, writeFile } from 'node:fs/promises';
+import { mkdir, writeFile } from 'node:fs/promises';
 
 // Override with LOCAL_URL to diff a production build (`astro preview`).
 const LOCAL = process.env.LOCAL_URL ?? 'http://localhost:4321';
@@ -33,7 +33,6 @@ const [localPath = '/', refName = 'index', regionArg = 'header,footer'] = proces
   .slice(2)
   .filter((a) => !a.startsWith('--'));
 const regions = regionArg.split(',');
-const againstLive = flags.includes('--live');
 const frame = Number(flags.find((f) => f.startsWith('--frame='))?.split('=')[1] ?? 0);
 
 // Freeze Lottie animations on `frame`: Webflow's instances on the live site,
@@ -73,23 +72,18 @@ const browser = await chromium.launch({ channel: 'chrome' });
 let worst = 0;
 
 for (const width of WIDTHS) {
-  let ref;
-  if (againstLive) {
-    const livePage = await browser.newPage({ viewport: { width, height: 900 }, deviceScaleFactor: 1 });
-    await livePage.goto(LIVE + localPath, { waitUntil: 'networkidle' });
-    await livePage.evaluate(() => document.fonts.ready);
-    await loadLazyImages(livePage);
-    await freezeLotties(livePage);
-    ref = PNG.sync.read(await livePage.screenshot({ fullPage: true }));
-    await livePage.close();
-  } else {
-    ref = PNG.sync.read(await readFile(`reference/shots/${width}/${refName}.png`));
-  }
+  const livePage = await browser.newPage({ viewport: { width, height: 900 }, deviceScaleFactor: 1 });
+  await livePage.goto(LIVE + localPath, { waitUntil: 'networkidle' });
+  await livePage.evaluate(() => document.fonts.ready);
+  await loadLazyImages(livePage);
+  await freezeLotties(livePage);
+  const ref = PNG.sync.read(await livePage.screenshot({ fullPage: true }));
+  await livePage.close();
   const page = await browser.newPage({ viewport: { width, height: 900 }, deviceScaleFactor: 1 });
   await page.goto(LOCAL + localPath, { waitUntil: 'networkidle' });
   await page.evaluate(() => document.fonts.ready);
   await loadLazyImages(page);
-  if (againstLive) await freezeLotties(page);
+  await freezeLotties(page);
   // Astro's dev toolbar floats over the bottom of the page.
   await page.evaluate(() => document.querySelector('astro-dev-toolbar')?.remove());
   const box = await page.evaluate(() => {
@@ -129,10 +123,8 @@ for (const width of WIDTHS) {
     worst = Math.max(worst, pct);
     await mkdir(`reference/diff/${width}`, { recursive: true });
     await writeFile(`reference/diff/${width}/${refName}-${region}.png`, PNG.sync.write(diff));
-    if (againstLive) {
-      await writeFile(`reference/diff/${width}/${refName}-${region}-live.png`, PNG.sync.write(b));
-      await writeFile(`reference/diff/${width}/${refName}-${region}-local.png`, PNG.sync.write(a));
-    }
+    await writeFile(`reference/diff/${width}/${refName}-${region}-live.png`, PNG.sync.write(b));
+    await writeFile(`reference/diff/${width}/${refName}-${region}-local.png`, PNG.sync.write(a));
     console.log(`${String(width).padStart(4)}px ${region.padEnd(6)} ${bad.toString().padStart(6)} px differ (${pct.toFixed(2)}%)`);
   }
 }

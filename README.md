@@ -1,88 +1,90 @@
-# Webflow → Astro migration
+# nynkezwart.com
 
-One-off script that turns the Webflow CSV exports of nynkezwart.com into Astro
-content collections, and pulls every asset off Webflow's CDN into the repo.
+Nynke Zwart's portfolio: a static [Astro](https://astro.build) site, served
+by GitHub Pages at https://www.nynkezwart.com. Content is Markdown in this
+repo; there's no CMS or database.
 
-## Run it
+## Run it locally
 
 ```bash
-python3 -m venv .venv && .venv/bin/pip install requests
-
-# Dry run first — writes Markdown, copies no assets.
-.venv/bin/python migrate.py --csv-dir . --out . --skip-images
-
-# The real thing. 179 assets.
-.venv/bin/python migrate.py --csv-dir . --out .
+npm install
+npm run dev        # http://localhost:4321, reloads as you edit
+npm run build      # the finished site, in dist/
+npm run preview    # serve dist/ to check the build
 ```
 
-Every run also writes `asset-manifest.tsv` — one row per asset, listing the
-source URL and where it lands. If you'd rather not use Python for the
-download, `download-assets.sh` fetches exactly the same files with `curl`.
+## Publish
 
-`--csv-dir` is the folder holding the six exported CSVs. `--out` is the root of
-the Astro project. Re-running is safe: assets already on disk are skipped.
-Assets are copied from the local backup in `assets/webflow/` when present and
-only downloaded from Webflow's CDN when missing there.
+Push to `main`. GitHub Actions builds the site and publishes it in 2–3
+minutes (`.github/workflows/deploy.yml`); follow it in the repository's
+Actions tab, or with `gh run list`.
 
-## What it writes
+## Where things are
 
 ```
 src/
   content/
-    projects/<slug>.md          34 files
-    projects/<slug>/images/     assets for that project
-    categories/<slug>.md         4 files
-    categories/<slug>/images/   logos and the Lottie
-  assets/footer/                 social icons
-  data/footer.json
+    projects/<slug>.md          one per project, at /projects/<slug>
+    projects/<slug>/images/     that project's images
+    categories/<slug>.md        the four category pages, at /site-categories/<slug>
+    pages/home.md, aboutme.md   text of the home and About me pages
+  content.config.ts             what each file must contain
+  data/footer.json              the footer's links
+  components/, layouts/, pages/ how everything looks
+public/cv/nynke-zwart-cv.pdf    the CV; replace the file to update it
 ```
 
-Each project's images live next to its Markdown file and are referenced
-relatively (`./<slug>/images/foo.jpg`). That's deliberate — Astro's `image()` schema
-helper picks up relative paths and handles resizing and format conversion at
-build time.
+## Editing a project
 
-## Then
+A project is its Markdown file plus its `images/` folder. The frontmatter
+holds the facts, the cover, the gallery and the side-by-side Method images;
+the text below it is the page body:
 
-`src/content.config.ts` defines the schema the
-generated frontmatter expects, and replaces the field editor Webflow gave you:
-a bad category slug or a missing image becomes a build error instead of a
-broken page.
+```markdown
+---
+title: "Macrame"
+summary: "Shown on the category page."
+category: "naai-outline"
+cover: "./macrame/images/img_8550.jpg"
+gallery:
+  - "./macrame/images/img_7101.jpg"
+…
+---
 
-## Field mapping
+## Method
 
-| Webflow                            | Frontmatter                   |
-| ---------------------------------- | ----------------------------- |
-| Project title                      | `title`                       |
-| Project short summary              | `summary` (tags stripped)     |
-| Highlighted text                   | `highlightSummary`, only where it differs from the summary |
-| Project category                   | `category` (collection ref)   |
-| Project type / tags / skills learnt| `type`, `tags`, `skills` — resolved from slugs to labels |
-| Project start/end date             | `startDate`, `endDate` (ISO)  |
-| IsHighlightedProject               | `featured`                    |
-| Created On                         | `created` (list order)        |
-| Project cover image                | `cover`                       |
-| Project gallery images             | `gallery` + `galleryCaption`  |
-| Method image LB / RB               | `methodPair`                  |
-| Project video link                 | `video.youtube` (ID extracted)|
-| Method text 1, full-width image, method text 2 | body, in that order |
-| Conclusion and future plans        | body, under its own heading   |
+Text. One image on its own line appears full width, with the text in
+the brackets as its caption:
 
-Reference collections (types, tags, skills) are flattened into plain strings.
-They held nothing but a name and a slug, so a separate collection for each
-would be three extra files to maintain for no gain. If you later want tag
-archive pages, generate them from the values instead.
+![Caption under the image](./macrame/images/rope.jpg)
 
-## Known issues in the source data
+## Conclusion and future plans
 
-The script prints these at the end of a run:
+Optional; left out, the section doesn't appear.
+```
 
-- `tikkie` has no category and is still a draft — it won't appear anywhere.
-- The Etsy footer entry has no URL in the export, so `migrate.py` skips it.
-  Added by hand to `src/data/footer.json` (2026-09-24, ClubKekeJewelry shop,
-  after GitHub); a re-run of the migration would drop it again.
-- `design-outline` is the only category with a Lottie animation attached, and
-  it points at a *different* Webflow project (site ID `5f36f3d3…`, not
-  `5f3a5425…`). The other three categories have no Lottie set. Your assets zip
-  does contain four `*_walkingtext.json` Lottie files — those were placed on
-  pages directly rather than through the CMS, so they're already safe.
+Images are referenced relative to the project's Markdown file. Astro makes
+resized copies at build time, so add the originals; GIFs become animated
+WebP. A missing image, an unknown category or a missing field stops the
+build with an error, rather than publishing a broken page.
+
+Set `draft: true` to keep a project off the site. `featured: true` puts it
+under its category's Highlights.
+
+After adding or replacing a YouTube video (`video.youtube` in the
+frontmatter), run `node scripts/video-aspects.mjs --write` to store its
+shape, so the player isn't letterboxed.
+
+## Scripts
+
+- `scripts/video-aspects.mjs`: checks every video's shape against YouTube.
+- `scripts/compare.mjs`: pixel-diffs the local site against the live one,
+  at four widths. Handy before pushing a change that shouldn't move anything.
+- `scripts/css-rules.mjs`: prints rules from the old Webflow stylesheet in
+  `reference/webflow/`.
+
+## History
+
+Until September 2026 the site ran on Webflow; its CMS export was converted
+into these Markdown files on 2026-09-23. `reference/` holds the old site's
+HTML, stylesheet and page assets, as a record of what it looked like.
