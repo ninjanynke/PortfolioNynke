@@ -17,7 +17,6 @@ created: "2021-12-20T21:33:00Z"
 featured: false
 featuredTag: "Design"
 cover: "./designing-a-company-logo/images/movelab.png"
-draft: false
 methodPair:
   - src: "./designing-a-company-logo/images/firstlogosai-01.png"
     caption: "These are some early designs of the logo"

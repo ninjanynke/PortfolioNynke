@@ -15,7 +15,6 @@ created: "2021-12-21T07:51:58Z"
 featured: false
 featuredTag: "Do It Yourself"
 cover: "./trombone-lamp/images/trombone-3.png"
-draft: false
 methodPair:
   - src: "./trombone-lamp/images/untitled-3.png"
 ---

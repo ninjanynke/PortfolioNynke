@@ -22,7 +22,6 @@ created: "2021-12-20T20:48:06Z"
 featured: false
 featuredTag: "Child robot interaction"
 cover: "./a-social-robot-playpal-for-children/images/screenshot-2021-12-27-at-18.17.39.png"
-draft: false
 methodPair:
   - src: "./a-social-robot-playpal-for-children/images/socialplaypal2.jpg"
     caption: "Three different appearances as presented to the children for feedback."

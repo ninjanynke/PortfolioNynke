@@ -16,7 +16,6 @@ created: "2021-12-27T10:34:22Z"
 featured: true
 featuredTag: "Object oriented programming"
 cover: "./flight-trajectory-calculator/images/screenshot-2022-01-07-at-10.02.16.png"
-draft: false
 methodPair:
   - src: "./flight-trajectory-calculator/images/screenshot-2021-12-27-at-18.03.18.png"
     caption: "A screenshot of the design process."

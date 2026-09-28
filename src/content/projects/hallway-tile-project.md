@@ -14,7 +14,6 @@ created: "2023-12-20T16:01:01Z"
 featured: false
 featuredTag: "Do It Yourself"
 cover: "./hallway-tile-project/images/ezgif-4-4199a3f7b7.gif"
-draft: false
 methodPair:
   - src: "./hallway-tile-project/images/tegelsbackground.jpg"
     caption: "The final panel of tiles."

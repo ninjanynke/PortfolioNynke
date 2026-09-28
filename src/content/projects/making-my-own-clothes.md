@@ -15,7 +15,6 @@ created: "2021-12-21T07:33:27Z"
 featured: true
 featuredTag: "Do It Yourself"
 cover: "./making-my-own-clothes/images/img_1004-2.jpg"
-draft: false
 gallery:
   - "./making-my-own-clothes/images/img_8163.jpg"
   - "./making-my-own-clothes/images/img_8161.jpg"

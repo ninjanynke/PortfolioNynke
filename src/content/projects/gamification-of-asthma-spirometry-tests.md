@@ -16,7 +16,6 @@ created: "2021-12-20T20:05:10Z"
 featured: false
 featuredTag: "Research"
 cover: "./gamification-of-asthma-spirometry-tests/images/img_2545.jpg"
-draft: false
 methodPair:
   - src: "./gamification-of-asthma-spirometry-tests/images/spiro.jpg"
     caption: "A few of the 20 chosen metaphors that were brainstormed about."

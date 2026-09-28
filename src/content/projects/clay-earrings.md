@@ -18,7 +18,6 @@ created: "2021-12-21T07:49:11Z"
 featured: false
 featuredTag: "Do It Yourself"
 cover: "./clay-earrings/images/screenshot-2021-12-21-at-10.12.22.jpg"
-draft: false
 gallery:
   - "./clay-earrings/images/clay_earring_design_nynke.png"
   - "./clay-earrings/images/clay_earring_design_clay_nynke.jpg"

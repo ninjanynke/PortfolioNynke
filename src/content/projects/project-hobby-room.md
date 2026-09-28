@@ -16,7 +16,6 @@ created: "2023-12-20T15:50:29Z"
 featured: false
 featuredTag: "Do It Yourself"
 cover: "./project-hobby-room/images/p1090794b.jpg"
-draft: false
 video:
   youtube: "bz7XyR4-p1w"
   caption: "I learnt a lot of things during this project! The first one is to keep holding on to the vision. I had to admit, I was hesitant about the colour pink. When first painted, I really disliked the way it looked with the white cabinet and black desk legs. That's when I pushed and kept going, because I knew that the final colour palette would make it worth it! One other setback was painting my cabinet: I chose the wrong colour yellow to begin with, and had to sand it off completely. Oh well... In the end, the space turnt out so cosy. I've found myself using the room a lot more than before, which is great. Let's keep creating!"

@@ -17,7 +17,6 @@ created: "2021-12-20T21:20:05Z"
 featured: false
 featuredTag: "Design"
 cover: "./animation-work/images/animation_crea_1.gif"
-draft: false
 methodPair:
   - src: "./animation-work/images/9d221039-dc6c-442d-9d02-6ad3a81b4f0a.jpg"
     caption: "A work in progress, using multiple programs."

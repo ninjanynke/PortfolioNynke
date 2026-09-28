@@ -15,7 +15,6 @@ created: "2021-12-21T07:45:02Z"
 featured: false
 featuredTag: "Do It Yourself"
 cover: "./watercolouring/images/screenshot-2021-12-27-at-17.42.31.png"
-draft: false
 gallery:
   - "./watercolouring/images/screenshot-2021-12-27-at-17.42.53.png"
   - "./watercolouring/images/screenshot-2021-12-27-at-17.42.40.png"

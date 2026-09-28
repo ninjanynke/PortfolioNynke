@@ -19,7 +19,6 @@ created: "2023-01-21T21:25:08Z"
 featured: false
 featuredTag: "UX Design"
 cover: "./nohrd-fitness-equipment-app-design/images/nohrd-icon-big.png"
-draft: false
 methodPair:
   - src: "./nohrd-fitness-equipment-app-design/images/nohrd-right-big.png"
     caption: "A quick look at the dark, previous theme of the NOHrD app. The new, light design takes into account NOHrD's brand style."

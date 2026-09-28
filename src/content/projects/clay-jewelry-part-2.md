@@ -15,7 +15,6 @@ created: "2023-04-10T10:18:21Z"
 featured: true
 featuredTag: "Design"
 cover: "./clay-jewelry-part-2/images/websitefront2.jpg"
-draft: false
 gallery:
   - "./clay-jewelry-part-2/images/15.jpg"
   - "./clay-jewelry-part-2/images/14.jpg"

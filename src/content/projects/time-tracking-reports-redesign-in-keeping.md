@@ -20,7 +20,6 @@ created: "2021-12-20T19:31:53Z"
 featured: true
 featuredTag: "UX Design"
 cover: "./time-tracking-reports-redesign-in-keeping/images/socialmedia_nieuwerapporten2.png"
-draft: false
 methodPair:
   - src: "./time-tracking-reports-redesign-in-keeping/images/klikboxgif.gif"
     caption: "Clickthrough new navigational structure instead of the previous tab structure."

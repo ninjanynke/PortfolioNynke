@@ -14,7 +14,6 @@ created: "2021-12-21T07:43:08Z"
 featured: false
 featuredTag: "Do It Yourself"
 cover: "./macrame/images/img_8550.jpg"
-draft: false
 gallery:
   - "./macrame/images/img_7101.jpg"
   - "./macrame/images/img_8550.jpg"

@@ -18,7 +18,6 @@ created: "2021-12-21T07:37:29Z"
 featured: false
 featuredTag: "Do It Yourself"
 cover: "./thrifting-and-painting/images/screenshot-2021-12-21-at-10.25.09.png"
-draft: false
 gallery:
   - "./thrifting-and-painting/images/img_5216.jpg"
   - "./thrifting-and-painting/images/img_5292.jpg"

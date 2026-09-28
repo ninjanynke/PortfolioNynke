@@ -16,7 +16,6 @@ created: "2021-12-21T07:40:47Z"
 featured: false
 featuredTag: "Do It Yourself"
 cover: "./wearable-technology/images/bowtie.gif"
-draft: false
 methodPair:
   - src: "./wearable-technology/images/screenshot-2021-12-27-at-18.27.27.png"
     caption: "I made two bowties that could react to music: one in blue and one in red."

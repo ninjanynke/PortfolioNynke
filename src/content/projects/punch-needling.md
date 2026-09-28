@@ -15,7 +15,6 @@ created: "2021-12-21T07:56:32Z"
 featured: false
 featuredTag: "Do It Yourself"
 cover: "./punch-needling/images/vangogh.gif"
-draft: false
 gallery:
   - "./punch-needling/images/img_3896.jpg"
   - "./punch-needling/images/screenshot-2021-12-27-at-16.45.19.png"

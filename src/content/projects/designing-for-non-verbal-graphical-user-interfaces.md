@@ -16,7 +16,6 @@ created: "2021-12-20T19:46:36Z"
 featured: false
 featuredTag: "Embodied interaction"
 cover: "./designing-for-non-verbal-graphical-user-interfaces/images/screenshot-2022-01-04-at-20.03.06.png"
-draft: false
 methodPair:
   - src: "./designing-for-non-verbal-graphical-user-interfaces/images/convos-02.jpg"
     caption: "Translating closeness. The longer an active conversation lasts, the closer the text boxes move towards each other."

@@ -37,7 +37,7 @@ const lottieUrl = lottie ? lottieUrls[`/src/content/categories/${lottie.replace(
 // other projects = the rest, latest end date first (no end date last),
 // then newest added first.
 const time = (date?: Date) => date?.getTime() ?? -Infinity;
-const projects = await getCollection('projects', (p) => p.data.category?.id === category.id && !p.data.draft);
+const projects = await getCollection('projects', (p) => p.data.category?.id === category.id);
 const highlights = projects
   .filter((p) => p.data.featured)
   .sort((a, b) => time(b.data.created) - time(a.data.created));

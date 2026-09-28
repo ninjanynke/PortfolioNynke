@@ -21,7 +21,6 @@ created: "2021-12-27T10:20:36Z"
 featured: true
 featuredTag: "UX Design"
 cover: "./ux-ui-for-waterrower-connect/images/screenshot-2022-01-08-at-12.05.14.png"
-draft: false
 methodPair:
   - src: "./ux-ui-for-waterrower-connect/images/featurefinish.jpg"
     caption: "The history page overview that allows filtering on type of workouts as well as periods."

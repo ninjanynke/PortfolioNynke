@@ -17,7 +17,6 @@ created: "2023-12-20T15:59:45Z"
 featured: false
 featuredTag: "Sewing"
 cover: "./bridal-guest-outfit/images/bridalcovergif.gif"
-draft: false
 gallery:
   - "./bridal-guest-outfit/images/img_9468.jpg"
   - "./bridal-guest-outfit/images/img_5695.jpg"

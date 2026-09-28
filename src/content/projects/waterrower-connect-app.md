@@ -20,7 +20,6 @@ created: "2021-12-21T08:06:42Z"
 featured: true
 featuredTag: "Object oriented programming"
 cover: "./waterrower-connect-app/images/screenshot-2022-01-08-at-12.05.14.png"
-draft: false
 video:
   youtube: "uHejbYyRuLU"
   aspect: "623:1280"

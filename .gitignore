@@ -10,3 +10,5 @@ npm-debug.log*
 .idea/
 # Pixel-diff output from scripts/compare.mjs
 reference/diff/
+# Unpublished projects stay on this laptop only; see CLAUDE.md
+src/content/drafts/

@@ -13,7 +13,6 @@ created: "2021-12-20T21:22:33Z"
 featured: false
 featuredTag: "Design"
 cover: "./graphic-design-works/images/astronautinsta.png"
-draft: false
 gallery:
   - "./graphic-design-works/images/e4585908-6647-442c-9947-38c6659be017.jpg"
   - "./graphic-design-works/images/img_9053.jpg"

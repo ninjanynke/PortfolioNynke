@@ -18,7 +18,6 @@ created: "2021-12-20T20:09:34Z"
 featured: false
 featuredTag: "Child robot interaction"
 cover: "./researching-group-dynamics-in-child-robot-interaction/images/screenshot-2021-12-27-at-19.47.33.png"
-draft: false
 methodPair:
   - src: "./researching-group-dynamics-in-child-robot-interaction/images/cristinasetup.jpg"
     caption: "This is what the experiment set up looked like."

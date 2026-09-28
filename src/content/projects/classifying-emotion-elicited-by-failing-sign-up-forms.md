@@ -17,7 +17,6 @@ created: "2021-12-21T08:09:18Z"
 featured: false
 featuredTag: "Machine Learning"
 cover: "./classifying-emotion-elicited-by-failing-sign-up-forms/images/failedformthumbnail.png"
-draft: false
 methodPair:
   - src: "./classifying-emotion-elicited-by-failing-sign-up-forms/images/form.jpg"
     caption: "The failing form that users filled in 3 times before it succeeded. They filled it in under the pretence of joining a different kind of study."

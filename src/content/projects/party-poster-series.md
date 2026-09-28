@@ -14,7 +14,6 @@ created: "2021-12-20T21:25:48Z"
 featured: false
 featuredTag: "Design"
 cover: "./party-poster-series/images/beestfeest.gif"
-draft: false
 gallery:
   - "./party-poster-series/images/screenshot-2021-12-27-at-18.12.30.png"
   - "./party-poster-series/images/screenshot-2021-12-27-at-18.12.23.png"

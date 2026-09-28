@@ -9,7 +9,7 @@ import arrow from '../../assets/site/arrow.svg';
 import arrowHover from '../../assets/site/arrow-dark.svg';
 
 export const getStaticPaths = (async () => {
-  const projects = await getCollection('projects', (p) => !p.data.draft);
+  const projects = await getCollection('projects');
   return projects.map((project) => ({ params: { slug: project.id }, props: { project } }));
 }) satisfies GetStaticPaths;
 

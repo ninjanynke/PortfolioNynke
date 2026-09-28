@@ -19,7 +19,6 @@ created: "2021-12-21T08:02:00Z"
 featured: false
 featuredTag: "Programming"
 cover: "./creating-and-testing-an-ar-sports-application/images/screenshot-2022-01-08-at-12.51.41.png"
-draft: false
 video:
   youtube: "mrVWC8WKl7w"
   caption: "This video explains in short what my thesis entailed. It shows video examples of the execution of the program as well."

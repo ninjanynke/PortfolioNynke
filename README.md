@@ -68,8 +68,16 @@ resized copies at build time, so add the originals; GIFs become animated
 WebP. A missing image, an unknown category or a missing field stops the
 build with an error, rather than publishing a broken page.
 
-Set `draft: true` to keep a project off the site. `featured: true` puts it
-under its category's Highlights.
+`featured: true` puts a project under its category's Highlights.
+
+## Drafts
+
+Unfinished projects go in `src/content/drafts/`, laid out the same way
+(`drafts/<slug>.md`, `drafts/<slug>/images/`). That folder is left out of
+Git, so drafts stay on your own computer: the dev server shows them at
+`/projects/<slug>`, but they never reach GitHub or the live site. To
+publish one, move its file and images folder to `src/content/projects/`.
+Back up your computer, because drafts are nowhere else.
 
 After adding or replacing a YouTube video (`video.youtube` in the
 frontmatter), run `node scripts/video-aspects.mjs --write` to store its

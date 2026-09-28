@@ -15,7 +15,6 @@ created: "2021-12-20T21:29:41Z"
 featured: false
 featuredTag: "Design"
 cover: "./birthday-calender/images/screenshot-2021-12-21-at-11.01.34.png"
-draft: false
 methodPair:
   - src: "./birthday-calender/images/kalenderverjaardag2.png"
     caption: "The monthly images."

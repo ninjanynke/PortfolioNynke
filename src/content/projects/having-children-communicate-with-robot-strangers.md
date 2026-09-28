@@ -20,7 +20,6 @@ created: "2021-12-27T11:09:35Z"
 featured: false
 featuredTag: "Child robot interaction"
 cover: "./having-children-communicate-with-robot-strangers/images/setup.png"
-draft: false
 methodPair:
   - src: "./having-children-communicate-with-robot-strangers/images/bestand_000.jpeg"
     caption: "A child filling in the questionnaire after interacting with a robot."

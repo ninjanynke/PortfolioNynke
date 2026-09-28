@@ -43,7 +43,14 @@ const categories = defineCollection({
 });
 
 const projects = defineCollection({
-  loader: glob({ pattern: "**/*.md", base: "./src/content/projects" }),
+  // Published projects, plus drafts from src/content/drafts/: that folder is
+  // gitignored, so drafts show on the dev server but never reach GitHub or
+  // the live site. Moving a file from drafts/ to projects/ publishes it.
+  loader: glob({
+    pattern: ["projects/*.md", "drafts/*.md"],
+    base: "./src/content",
+    generateId: ({ entry }) => entry.replace(/^(projects|drafts)\//, "").replace(/\.md$/, ""),
+  }),
   schema: ({ image }) =>
     z.object({
       title: z.string(),
@@ -74,7 +81,6 @@ const projects = defineCollection({
       // webp/avif and emit width/height. This is the main thing you were
       // getting from Webflow's CDN, and it happens at build time for free.
       cover: image().optional(),
-      draft: z.boolean().default(false),
 
       gallery: z.array(image()).default([]),
       galleryCaption: z.string().optional(),

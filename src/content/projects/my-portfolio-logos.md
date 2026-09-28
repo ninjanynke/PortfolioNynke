@@ -14,7 +14,6 @@ created: "2021-12-20T21:36:00Z"
 featured: false
 featuredTag: "Design"
 cover: "./my-portfolio-logos/images/logo_initials_.gif"
-draft: false
 methodPair:
   - src: "./my-portfolio-logos/images/logos.jpg"
     caption: "Filled in logos"

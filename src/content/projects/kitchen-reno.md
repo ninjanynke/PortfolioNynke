@@ -16,7 +16,6 @@ created: "2023-12-20T15:54:48Z"
 featured: false
 featuredTag: "Do It Yourself"
 cover: "./kitchen-reno/images/p1090747.jpg"
-draft: false
 gallery:
   - "./kitchen-reno/images/1.jpg"
   - "./kitchen-reno/images/2.jpg"
